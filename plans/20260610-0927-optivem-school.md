@@ -48,6 +48,10 @@
 3. **The two lists are configurable per deployment** — students and teachers/reviewers are config a
    self-hoster edits (built on hub's `students.json` / `reviewers.json`). `optivem/school` ships **example**
    configs; each deployment supplies its own.
+4. **Setup is idempotent / declarative (reconcile).** Config is the source of truth; onboarding converges
+   GitHub to it — *check-exists-else-create, update-if-drifted, never duplicate*. Re-running any step is
+   safe (`init` skips existing config; board setup reconciles fields/options; `sync` regenerates
+   deterministically). Mirrors hub's `sync-project.mjs` reconcile model.
 
 ## Architecture alignment — what v1 actually is (and what's deferred)
 

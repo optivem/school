@@ -8,6 +8,8 @@
     "node": ">=20"
   },
   "scripts": {
-    "config:check": "node scripts/load-config.mjs"
+    "init": "node scripts/init.mjs",
+    "config:check": "node scripts/load-config.mjs",
+    "sync": "node scripts/sync.mjs"
   }
 }
