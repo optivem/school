@@ -1,6 +1,7 @@
 {
   "title": "Your School",
   "board": {
+    "owner": "your-org-or-username",
     "id": "PVT_replace_me",
     "number": 0,
     "url": "https://github.com/orgs/your-org/projects/0",

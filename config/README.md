@@ -77,7 +77,7 @@ creating your board (a helper to fetch them comes with the project-sync script).
 
 ## Naming conventions (kept identical to hub)
 
-- **Project key:** 4-letter uppercase acronym (e.g. `DEMO`, `CCRS`).
+- **Project key:** 4-letter uppercase acronym (e.g. `DEMO`, `ACME`).
 - **Module number:** 2-digit zero-padded (`01`, `02`, … `15`).
 - **Course id:** short lowercase (`pipeline`, `atdd`).
 - **Sandbox Project option name:** `KEY — Name` · **Module option name:** `NN - Name`.
