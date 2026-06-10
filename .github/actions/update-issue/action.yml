@@ -1,0 +1,63 @@
+name: Update Issue
+description: Updates an issue title and body with project overview and checklist.
+
+inputs:
+  issue-number:
+    description: The issue number.
+    required: true
+  project-key:
+    description: The project key (e.g. ESHP).
+    required: true
+  project-name:
+    description: The project name.
+    required: true
+  repo-url:
+    description: The project repository URL.
+    required: true
+  course-id:
+    description: The course id (e.g. "atdd", "pipeline").
+    required: true
+  module:
+    description: The selected module string (e.g. "02 - Smoke Tests").
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Update title and body
+      uses: actions/github-script@v9
+      with:
+        script: |
+          const fs = require('fs');
+          const { loadConfig } = require('./scripts/load-config.cjs');
+          const projectKey = '${{ inputs.project-key }}';
+          const projectName = '${{ inputs.project-name }}';
+          const repoUrl = '${{ inputs.repo-url }}';
+          const selectedModule = '${{ inputs.module }}';
+          const moduleNum = selectedModule.split(' - ')[0];
+
+          const courseId = '${{ inputs.course-id }}';
+          const config = loadConfig('.');
+          const course = config.courses.find(c => c.id === courseId);
+          const courseName = course ? course.name : courseId;
+
+          const compositeId = `${projectKey}-${courseId.toUpperCase()}-${moduleNum}`;
+          const newTitle = `${compositeId} | ${selectedModule}`;
+
+          let body = `## Overview\n\n`;
+          body += `**Project:** [${projectName}](${repoUrl})\n`;
+          body += `**Course:** ${courseName}\n`;
+          body += `**Module:** ${selectedModule}\n`;
+          const checklistPath = `checklists/${courseId}/${moduleNum}.md`;
+          if (fs.existsSync(checklistPath)) {
+            const checklist = fs.readFileSync(checklistPath, 'utf8').trim();
+            body += `\n## Review Checklist\n\n${checklist}`;
+          }
+
+          await github.rest.issues.update({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: ${{ inputs.issue-number }},
+            title: newTitle,
+            body
+          });

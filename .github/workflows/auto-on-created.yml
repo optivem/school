@@ -1,0 +1,158 @@
+name: auto-on-created
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    outputs:
+      is-valid: ${{ steps.validate.outputs.is-valid }}
+      project-key: ${{ steps.validate.outputs.project-key }}
+      project-name: ${{ steps.validate.outputs.project-name }}
+      project-url: ${{ steps.validate.outputs.project-url }}
+      repo-url: ${{ steps.validate.outputs.repo-url }}
+      course-id: ${{ steps.validate.outputs.course-id }}
+      module-num: ${{ steps.validate.outputs.module-num }}
+      module: ${{ steps.validate.outputs.module }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Validate creator and find project
+        id: validate
+        uses: ./.github/actions/validate-issue
+        with:
+          username: ${{ github.event.issue.user.login }}
+          body: ${{ github.event.issue.body }}
+
+  check-gates:
+    runs-on: ubuntu-latest
+    needs: validate
+    if: needs.validate.outputs.is-valid == 'true'
+    outputs:
+      is-duplicate: ${{ steps.duplicate.outputs.is-duplicate }}
+      original-number: ${{ steps.duplicate.outputs.original-number }}
+      # TODO: Re-enable prerequisite outputs alongside the prereqs step below.
+      # allowed: ${{ steps.prereqs.outputs.allowed }}
+      # incomplete-module: ${{ steps.prereqs.outputs.incomplete-module }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Check for duplicate issue
+        id: duplicate
+        uses: ./.github/actions/check-duplicate
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          project-key: ${{ needs.validate.outputs.project-key }}
+          course-id: ${{ needs.validate.outputs.course-id }}
+          module-num: ${{ needs.validate.outputs.module-num }}
+          github-token: ${{ secrets.PROJECT_TOKEN }}
+
+      # TODO: Re-enable prerequisite check — currently disabled so tickets can be created out of module order.
+      # - name: Check module prerequisites
+      #   id: prereqs
+      #   if: steps.duplicate.outputs.is-duplicate != 'true'
+      #   uses: ./.github/actions/check-prerequisites
+      #   with:
+      #     project-key: ${{ needs.validate.outputs.project-key }}
+      #     course-id: ${{ needs.validate.outputs.course-id }}
+      #     module-num: ${{ needs.validate.outputs.module-num }}
+      #     github-token: ${{ secrets.PROJECT_TOKEN }}
+
+  close-invalid:
+    runs-on: ubuntu-latest
+    needs: validate
+    if: needs.validate.outputs.is-valid == 'false'
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Close unauthorized issue
+        uses: ./.github/actions/close-issue
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          title: "INVALID | ${{ github.event.issue.title }}"
+          body: "> [!CAUTION]\n> ## ❌ Issue Rejected\n> Hi @${{ github.event.issue.user.login }}, you are not a member of the selected project.\n>\n> If you believe this is an error, please contact the course administrator.\n>\n> **This issue has been closed automatically.**"
+
+  close-duplicate:
+    runs-on: ubuntu-latest
+    needs: [validate, check-gates]
+    if: needs.check-gates.outputs.is-duplicate == 'true'
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Close duplicate issue
+        uses: ./.github/actions/close-issue
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          title: "DUPLICATE | ${{ github.event.issue.title }}"
+          body: "Duplicate of #${{ needs.check-gates.outputs.original-number }}\n\n> [!CAUTION]\n> ## ❌ Duplicate Issue\n> A ticket for this project and module already exists: #${{ needs.check-gates.outputs.original-number }}\n>\n> **This issue has been closed automatically as a duplicate.**"
+          state-reason: "duplicate"
+
+  # TODO: Re-enable close-blocked job alongside the prereqs step above.
+  # close-blocked:
+  #   runs-on: ubuntu-latest
+  #   needs: [validate, check-gates]
+  #   if: needs.check-gates.outputs.is-duplicate != 'true' && needs.check-gates.outputs.allowed == 'false'
+  #   steps:
+  #     - uses: actions/checkout@v6
+  #
+  #     - name: Close issue if prerequisites not met
+  #       uses: ./.github/actions/close-issue
+  #       with:
+  #         issue-number: ${{ github.event.issue.number }}
+  #         title: "BLOCKED | ${{ github.event.issue.title }}"
+  #         body: "> [!CAUTION]\n> ## ❌ Prerequisites Not Met\n> You must complete the previous module before starting this one.\n>\n> **Incomplete module:** ${{ needs.check-gates.outputs.incomplete-module }}\n>\n> Please complete that module first, then re-create this ticket.\n>\n> **This issue has been closed automatically.**"
+
+  process:
+    runs-on: ubuntu-latest
+    needs: [validate, check-gates]
+    # TODO: Restore the prereq clause when re-enabling the prereqs step: && needs.check-gates.outputs.allowed != 'false'
+    if: needs.check-gates.outputs.is-duplicate != 'true'
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Add to project board
+        uses: actions/add-to-project@v1.0.2
+        with:
+          project-url: ${{ needs.validate.outputs.project-url }}
+          github-token: ${{ secrets.PROJECT_TOKEN }}
+
+      - name: Set status to In Review
+        uses: ./.github/actions/set-project-status
+        with:
+          issue-node-id: ${{ github.event.issue.node_id }}
+          status: In Review
+          github-token: ${{ secrets.PROJECT_TOKEN }}
+
+      - name: Set project fields
+        uses: ./.github/actions/set-project-fields
+        with:
+          issue-node-id: ${{ github.event.issue.node_id }}
+          course-id: ${{ needs.validate.outputs.course-id }}
+          project-key: ${{ needs.validate.outputs.project-key }}
+          module-num: ${{ needs.validate.outputs.module-num }}
+          github-token: ${{ secrets.PROJECT_TOKEN }}
+
+      # TODO: Re-enable assignee assignment
+      # - name: Assign team members
+      #   uses: ./.github/actions/assign-issue
+      #   with:
+      #     issue-number: ${{ github.event.issue.number }}
+      #     assignees: ${{ needs.validate.outputs.assignees }}
+
+      - name: Update title and description
+        uses: ./.github/actions/update-issue
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          project-key: ${{ needs.validate.outputs.project-key }}
+          project-name: ${{ needs.validate.outputs.project-name }}
+          repo-url: ${{ needs.validate.outputs.repo-url }}
+          course-id: ${{ needs.validate.outputs.course-id }}
+          module: ${{ needs.validate.outputs.module }}
+
+      - name: Set issue type to Task
+        uses: ./.github/actions/set-issue-type
+        with:
+          issue-node-id: ${{ github.event.issue.node_id }}
+          type: Task

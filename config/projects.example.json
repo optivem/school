@@ -1,9 +1,9 @@
 [
   {
     "key": "DEMO",
-    "name": "Demo Sandbox Project",
-    "repo": "https://github.com/your-org/demo-sandbox",
+    "name": "Acme Widget Service",
+    "repo": "https://github.com/your-org/acme-widget",
     "lead": "octocat",
-    "members": ["octocat", "hubot"]
+    "members": ["octocat", "monalisa"]
   }
 ]

@@ -28,7 +28,7 @@ roster is the master name/handle map.
 
 ### `reviewers.json` — the teacher/reviewer list
 ```json
-[{ "github": "valentinajemuovic", "name": "Valentina Jemuovic" }]
+[{ "github": "hubot", "name": "Hubot Teacher" }]
 ```
 Teachers/coaches. A reviewer can review **any** project, comment on issues, and drive status
 transitions. Keep this list small and trusted.

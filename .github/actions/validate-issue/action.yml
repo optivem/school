@@ -1,0 +1,124 @@
+name: Validate Issue
+description: Parses issue body for project/module and validates creator membership.
+
+inputs:
+  username:
+    description: The GitHub username of the issue creator.
+    required: true
+  body:
+    description: The issue body text.
+    required: true
+
+outputs:
+  is-valid:
+    description: "'true' if the creator is a member or reviewer for the selected project."
+    value: ${{ steps.validate.outputs.is_valid }}
+  project-name:
+    description: The project name.
+    value: ${{ steps.validate.outputs.project_name }}
+  project-key:
+    description: The project key.
+    value: ${{ steps.validate.outputs.project_key }}
+  project-url:
+    description: The sandbox project board URL.
+    value: ${{ steps.validate.outputs.project_url }}
+  repo-url:
+    description: The project repository URL.
+    value: ${{ steps.validate.outputs.repo_url }}
+  course-id:
+    description: The course id the project belongs to.
+    value: ${{ steps.validate.outputs.course_id }}
+  module:
+    description: The selected module string.
+    value: ${{ steps.validate.outputs.module }}
+  module-num:
+    description: The module number (e.g. "02").
+    value: ${{ steps.validate.outputs.module_num }}
+  assignees:
+    description: Comma-separated list of team member GitHub usernames.
+    value: ${{ steps.validate.outputs.assignees }}
+
+runs:
+  using: composite
+  steps:
+    - name: Validate
+      id: validate
+      uses: actions/github-script@v9
+      env:
+        INPUT_USERNAME: ${{ inputs.username }}
+        INPUT_BODY: ${{ inputs.body }}
+      with:
+        script: |
+          const { loadConfig } = require('./scripts/load-config.cjs');
+          const data = loadConfig('.');
+          const creator = process.env.INPUT_USERNAME;
+          const body = process.env.INPUT_BODY || '';
+
+          // Reject anything that looks like a placeholder: empty, _No response_,
+          // or the "— Select a ... —" sentinel emitted by scripts/sync-issue-template.mjs.
+          const SENTINEL_RE = /^— Select a .* —$/;
+          const isBlank = v => !v || v === '_No response_' || SENTINEL_RE.test(v);
+
+          const moduleMatch = body.match(/### Module\s*\n\s*(.+)/);
+          const selectedModule = moduleMatch ? moduleMatch[1].trim() : '';
+          core.setOutput('module', selectedModule);
+
+          const projectMatch = body.match(/### Project\s*\n\s*(.+)/);
+          const selectedProject = projectMatch ? projectMatch[1].trim() : '';
+
+          if (isBlank(selectedProject) || isBlank(selectedModule)) {
+            core.setOutput('is_valid', 'false');
+            return;
+          }
+
+          const isReviewer = data.reviewers.some(r => r.github.toLowerCase() === creator.toLowerCase());
+
+          // Match against either the "KEY — Name" format (current templates) or
+          // bare name (legacy templates). Tolerates both en-dash " — " and hyphen " - ".
+          const projectKeyGuess = selectedProject.split(/\s[—-]\s/)[0].trim();
+          const team = data.projects.find(t =>
+            t.key.toLowerCase() === projectKeyGuess.toLowerCase() ||
+            t.name === selectedProject
+          );
+          if (!team) {
+            core.setOutput('is_valid', 'false');
+            return;
+          }
+
+          const isMember = team.members.some(m => m.toLowerCase() === creator.toLowerCase());
+          if (!isMember && !isReviewer) {
+            core.setOutput('is_valid', 'false');
+            return;
+          }
+
+          const moduleNum = selectedModule.split(' - ')[0];
+
+          // Find course: prefer explicit ### Course field, fall back to matching by project key + module
+          const courseMatch = body.match(/### Course\s*\n\s*(.+)/);
+          const selectedCourse = courseMatch ? courseMatch[1].trim() : '';
+          let courseId = '';
+          if (selectedCourse) {
+            const found = data.courses.find(c => c.name === selectedCourse);
+            if (found) courseId = found.id;
+          }
+          if (!courseId) {
+            for (const course of data.courses) {
+              const keys = (course.projectKeys || []).map(k => k.toUpperCase());
+              if (keys.includes(team.key.toUpperCase())) {
+                const hasModule = course.modules.some(m => m.number === moduleNum);
+                if (hasModule) {
+                  courseId = course.id;
+                  break;
+                }
+              }
+            }
+          }
+
+          core.setOutput('is_valid', 'true');
+          core.setOutput('project_url', data.board.url);
+          core.setOutput('project_name', team.name);
+          core.setOutput('project_key', team.key);
+          core.setOutput('repo_url', team.repo);
+          core.setOutput('module_num', moduleNum);
+          core.setOutput('assignees', team.members.join(','));
+          core.setOutput('course_id', courseId);
