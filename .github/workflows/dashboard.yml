@@ -1,0 +1,60 @@
+name: dashboard
+
+# Regenerates the static dashboard (docs/) and commits it ONLY when the content
+# actually changed (gated on the content-hash in docs/version.json). Cloudflare
+# Pages serves docs/ and auto-redeploys on the push.
+#
+# No `push` trigger here, so the bot's own docs commit can't loop. (GitHub Pages
+# is not used — the Free plan won't serve a private repo, and the dashboard shows
+# private student data, so it's hosted on Cloudflare Pages + Access instead.)
+
+on:
+  workflow_run:
+    workflows: [auto-on-created, auto-on-closed, auto-on-comment, auto-on-reopened]
+    types: [completed]
+  discussion:
+    types: [pinned, unpinned, edited, deleted]
+  schedule:
+    - cron: "*/30 * * * *"  # every 30 minutes
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# Serialize but never cancel in-flight: each event must converge docs/ to latest.
+concurrency:
+  group: dashboard
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+
+      - name: Generate dashboard
+        env:
+          GITHUB_TOKEN: ${{ secrets.PROJECT_TOKEN }}
+        run: |
+          export GITHUB_OWNER=${GITHUB_REPOSITORY%/*}
+          export GITHUB_REPO=${GITHUB_REPOSITORY#*/}
+          node scripts/generate-dashboard.mjs
+
+      - name: Commit dashboard if content changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # version.json holds a content hash (stable unless the data changed).
+          # index.html's timestamp changes every run, so gate the commit on the hash.
+          git add docs/version.json
+          if git diff --staged --quiet -- docs/version.json; then
+            echo "No content change — skipping commit."
+          else
+            git add docs/
+            git commit -m "chore: refresh dashboard [skip ci]"
+            git push
+          fi
