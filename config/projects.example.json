@@ -1,0 +1,9 @@
+[
+  {
+    "key": "DEMO",
+    "name": "Demo Sandbox Project",
+    "repo": "https://github.com/your-org/demo-sandbox",
+    "lead": "octocat",
+    "members": ["octocat", "hubot"]
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "id": "example",
+  "name": "Example Course",
+  "courseSlug": "example",
+  "url": "https://your-lms.example.com/courses/example",
+  "modules": [
+    { "number": "01", "label": "01-introduction", "name": "Introduction", "url": "" },
+    { "number": "02", "label": "02-first-topic", "name": "First Topic", "url": "" }
+  ],
+  "projectKeys": ["DEMO"]
+}

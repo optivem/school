@@ -1,0 +1,13 @@
+{
+  "name": "optivem-school",
+  "version": "0.1.0",
+  "description": "Optivem School — an open-source, GitHub-backed learning platform: guided practice with Q&A and project reviews, scoped by course enrollment.",
+  "license": "AGPL-3.0-or-later",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "config:check": "node scripts/load-config.mjs"
+  }
+}
