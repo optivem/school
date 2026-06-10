@@ -311,3 +311,14 @@ per-deployment option** for open/free schools, since `optivem/school` is a reusa
   — but as a **structured learning platform** on GitHub, not a Slack-style channel.
 - **Circle stays the brand/membership**; `circle.optivem.com`'s marketing page is unchanged. Optivem
   School is the *platform* it runs on.
+
+## Future / out of scope — revisit Thinkific?
+
+Course **lesson content is already plain Markdown (`.md`)**, so it's worth questioning whether Thinkific
+is needed at all. Options to weigh later: keep hosting courses on **Thinkific** (current), or host the
+lessons **elsewhere / in-repo** and **embed or serve them here**, dropping Thinkific. The `courses/*.json`
+config currently stores Thinkific URLs per module — if we move off Thinkific, that field becomes a
+self-hosted lesson URL instead.
+
+**Out of scope for this plan — create a follow-up plan** to discuss the LMS / content-hosting decision
+(Thinkific vs self-hosted Markdown vs embed) and its impact on the `module.url` field + the dashboard links.
