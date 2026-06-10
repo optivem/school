@@ -279,6 +279,29 @@ Effectively **$0** at this scale, on top of the domain you already own:
   "Reviews" Discussion category keeps everything in one surface. Decide the `reviews.js` backing model.
 - **Cloudflare Pages root** for `optivem/school` and confirming Functions are enabled.
 
+## Student registration / enrollment policy (DECISION NEEDED)
+
+Who can become a student — anyone with a GitHub account, or a curated list?
+
+- **A — Restricted allow-list (recommended; hub's model).** A user can only participate if an admin has
+  added their GitHub handle to `config/students.json` **and** a project's `members` (or they're in
+  `reviewers.json`). `validate-issue` rejects + auto-closes submissions from anyone not on the list. For
+  Optivem the list is synced from **Thinkific (paying students)** — manual now, automatic later. Viewing
+  the dashboard is separately gated by **Cloudflare Access**. → fits a **paid / gated** product.
+- **B — Open self-registration.** Anyone with a GitHub account self-enrolls (e.g. a "request to join"
+  issue form that auto-adds them). Suits free/open deployments; **not** appropriate for Optivem's paid
+  courses.
+
+**How "restrict" is enforced (A):** (1) the **allow-list in config** is the source of truth;
+(2) **`validate-issue`** checks the issue creator and rejects non-members; (3) **Cloudflare Access**
+gates *viewing* the dashboard; (4) optional admin-approved **"request to enroll"** issue template that,
+once approved, appends the handle to `students.json` — a controlled on-ramp without full self-service.
+
+**Recommendation: A for Optivem** (paid → registration must be curated/Thinkific-driven). Keep **B as a
+per-deployment option** for open/free schools, since `optivem/school` is a reusable template.
+
+**Decision needed:** confirm A for Optivem, and whether to ship the optional "request to enroll" on-ramp.
+
 ## Relationship to existing plans
 
 - Supersedes the discussion-reader framing in this same dated slot (the file was renamed from

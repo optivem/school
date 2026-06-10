@@ -11,6 +11,7 @@
     "init": "node scripts/init.mjs",
     "config:check": "node scripts/load-config.mjs",
     "board": "node scripts/sync-project.mjs",
-    "sync": "node scripts/sync.mjs"
+    "sync": "node scripts/sync.mjs",
+    "apply": "node scripts/apply.mjs"
   }
 }
