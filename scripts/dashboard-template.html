@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>{{TITLE}}</title>
+  <style>{{DASHBOARD_CSS}}</style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-left">
+      <h1>{{TITLE}}</h1>
+      <p class="subtitle">Last updated: {{LAST_UPDATED}}</p>
+    </div>
+    <nav class="nav-tabs">
+      <span class="nav-tab active">Home</span>
+      <a class="nav-tab" href="https://github.com/{{GITHUB_OWNER}}/{{GITHUB_REPO}}/discussions" target="_blank" rel="noopener">Discussions</a>
+      <a class="nav-tab" href="{{COURSES_URL}}" target="_blank" rel="noopener">Courses</a>
+    </nav>
+  </div>
+{{PINNED_BANNER}}
+  <div class="desktop-content">
+{{COURSE_SECTIONS}}
+{{SUMMARY_TABLE}}
+  </div>
+  <div class="cards">
+{{COURSE_CARDS}}
+  </div>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-swatch" style="background:#dbeafe"></div> In Review</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#fef9c3"></div> In Progress</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#dcfce7"></div> ✅ Done</div>
+  </div>
+  <script>
+    const CURRENT_VERSION = "{{VERSION}}";
+    async function checkVersion() {
+      try {
+        const res = await fetch("./version.json", { cache: "no-store" });
+        const { version } = await res.json();
+        if (version && version !== CURRENT_VERSION) location.reload();
+      } catch {}
+    }
+    window.addEventListener("focus", checkVersion);
+    setInterval(checkVersion, 5 * 60 * 1000);
+  </script>
+  <div class="teacher-links">
+    <span>For Teachers:</span>
+    <a href="{{BOARD_URL}}" target="_blank" rel="noopener">Project Board</a>
+    <a href="https://github.com/{{GITHUB_OWNER}}/{{GITHUB_REPO}}" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://github.com/{{GITHUB_OWNER}}/{{GITHUB_REPO}}/actions" target="_blank" rel="noopener">Actions</a>
+    <a href="https://github.com/{{GITHUB_OWNER}}/{{GITHUB_REPO}}/actions/workflows/dashboard.yml" target="_blank" rel="noopener">Refresh Dashboard</a>
+  </div>
+  <div class="disclaimer">
+    Statuses are set automatically. If you submitted a review request and the status has not updated, please contact your course administrator.
+  </div>
+</body>
+</html>

@@ -12,6 +12,7 @@
     "config:check": "node scripts/load-config.mjs",
     "board": "node scripts/sync-project.mjs",
     "sync": "node scripts/sync.mjs",
+    "dashboard": "node scripts/generate-dashboard.mjs",
     "apply": "node scripts/apply.mjs"
   }
 }
