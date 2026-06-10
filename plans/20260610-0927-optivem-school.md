@@ -274,10 +274,21 @@ Effectively **$0** at this scale, on top of the domain you already own:
   **Future: automatic Thinkific integration** (API sync of enrollments → config or D1). Backend reads
   the config; swapping in a live Thinkific sync later doesn't change the authz layer.
 
-**Still open (not blocking v1):**
-- **Submissions = Issues or Discussions?** Issues give a native status field + project board; a
-  "Reviews" Discussion category keeps everything in one surface. Decide the `reviews.js` backing model.
-- **Cloudflare Pages root** for `optivem/school` and confirming Functions are enabled.
+**Still open (the remaining phase — Cloudflare hosting):**
+- **Dashboard refresh + hosting mechanism.** The generator works (`npm run dashboard` → `docs/index.html`).
+  Two ways to host + auto-refresh on Cloudflare Pages:
+  - **A (recommended): Cloudflare build-time generation + deploy hook.** CF Pages build command runs
+    `npm run dashboard` (with `PROJECT_TOKEN` as a CF build env var), output dir `docs/`. A `dashboard`
+    GitHub workflow pings a **CF deploy hook** on issue events / schedule so CF rebuilds. No generated
+    HTML committed; no repo churn.
+  - **B: commit `docs/` from a workflow.** Simpler, but the generator stamps a fresh version/timestamp
+    each run → a commit every refresh (noisy). Would need a content-hash version to avoid churn.
+- **Cloudflare Access** policy (allow-list) + the `school.optivem.com` CNAME at Bluehost.
+
+> **Build status (2026-06-10):** the whole engine is built + **live-tested** against `school-test` board
+> #26 — config + schema validation, `init`/`sync`/`apply`, board create+reconcile, the full submission
+> lifecycle (create → In Review → In Progress → Done, + reject/duplicate), and dashboard generation.
+> Remaining = the Cloudflare hosting phase above (`auto-on-edited`/`auto-on-deleted` workflows optional).
 
 ## Student registration / enrollment policy (DECISION NEEDED)
 
