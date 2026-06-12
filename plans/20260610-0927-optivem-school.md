@@ -276,15 +276,18 @@ Effectively **$0** at this scale, on top of the domain you already own:
   **Future: automatic Thinkific integration** (API sync of enrollments → config or D1). Backend reads
   the config; swapping in a live Thinkific sync later doesn't change the authz layer.
 
-**Still open (the remaining phase — Cloudflare hosting):**
-- **Dashboard refresh + hosting mechanism.** The generator works (`npm run dashboard` → `docs/index.html`).
-  Two ways to host + auto-refresh on Cloudflare Pages:
-  - **A (recommended): Cloudflare build-time generation + deploy hook.** CF Pages build command runs
-    `npm run dashboard` (with `PROJECT_TOKEN` as a CF build env var), output dir `docs/`. A `dashboard`
-    GitHub workflow pings a **CF deploy hook** on issue events / schedule so CF rebuilds. No generated
-    HTML committed; no repo churn.
-  - **B: commit `docs/` from a workflow.** Simpler, but the generator stamps a fresh version/timestamp
-    each run → a commit every refresh (noisy). Would need a content-hash version to avoid churn.
+**Decided (Cloudflare hosting):**
+- **Dashboard refresh = model A — Cloudflare build-time generation + deploy hook (DECIDED 2026-06-12).**
+  CF Pages build command runs `node scripts/generate-dashboard.mjs` (with read-only `PROJECT_TOKEN` +
+  `GITHUB_OWNER=optivem` / `GITHUB_REPO=hub` as CF build env vars), output dir `docs/`. Hub's `dashboard`
+  workflow POSTs a **CF deploy hook** on every `auto-on-*` completion (`workflow_run`) + a 30-min schedule
+  backstop, so CF rebuilds on ticket-add and status-change. **Chosen over B because the generated HTML
+  holds private student data — model A never commits it to git history** (B would write a permanent
+  record into the soon-private repo on every refresh). The dashboard is a static cached snapshot, not a
+  live read; students never hit the GitHub API.
+  - **Consequence:** hub's `dashboard.yml` becomes deployment-specific (pings the CF hook) and diverges
+    from school's generic version → `apply.mjs` must treat `.github/workflows/dashboard.yml` as
+    deployment-owned (skip it), like it already skips `config/*.json`. ✅ done.
 - **Cloudflare Access** policy (GitHub IdP + `optivem-students` team, no repo access) + the `learn.optivem.com` CNAME at Bluehost.
 
 > **Build status (2026-06-10):** the whole engine is built + **live-tested** against `school-test` board
