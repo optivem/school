@@ -18,6 +18,58 @@
   (Free plan), so the dashboard **must** be on **Cloudflare Pages + Access** by then — exactly the setup
   validated on `school-test`. So this migration is naturally bounded by that date.
 
+## ▶ RESUME HERE (as of 2026-06-12) — next: Cloudflare Access
+
+**This section is self-contained so a fresh session can continue without prior chat history.**
+
+### Done so far
+- Engine on hub `main` (hardened + full superset of hub); end-to-end verified via the **`SHOP`** sandbox
+  project (board #18). `sync-project.mjs` data-loss bug fixed (preserves option ids).
+- **Cloudflare Pages live** — project **`optivem-learn`**, **model A** (CF runs `generate-dashboard.mjs`
+  at build). Build settings: command `node scripts/generate-dashboard.mjs`, output `docs`, env
+  `GITHUB_TOKEN`(read-only)/`GITHUB_OWNER=optivem`/`GITHUB_REPO=hub`/`NODE_VERSION=20`.
+- **hub `dashboard.yml`** = model A: POSTs the **`CF_DEPLOY_HOOK`** secret on every `auto-on-*` completion
+  + 30-min schedule. (Pages deploy removed; `dashboard.yml` is now deployment-owned — `apply` skips it.)
+- **`learn.optivem.com` LIVE** (CF custom domain + Bluehost CNAME `learn` → `optivem-learn.pages.dev`).
+- **`optivem.github.io/hub`** serves a static redirect → `https://learn.optivem.com/` (Pages on branch
+  `main`/`docs`; `hub/docs/index.html`).
+- **`optivem-students`** GitHub team created (id 18008854, **no repo access**, currently **empty**).
+
+### ⚠️ NEXT ACTION — apply Cloudflare Access (gate the dashboard)
+`learn.optivem.com` + `optivem-learn.pages.dev` are **public + ungated** (exposing student data) until
+this is done. Steps (in the user's Cloudflare + GitHub — agent can't reach those dashboards):
+
+1. **GitHub OAuth App** — `optivem` org → Settings → Developer settings → OAuth Apps → New.
+   Homepage `https://<team>.cloudflareaccess.com`, callback
+   `https://<team>.cloudflareaccess.com/cdn-cgi/access/callback` (`<team>` = Zero Trust team domain,
+   Zero Trust → Settings → Custom Pages). Copy Client ID + generate Client Secret.
+2. **Zero Trust → Settings → Authentication → Login methods → Add → GitHub** → paste id/secret → Test.
+3. **Zero Trust → Access → Applications → Add → Self-hosted**: name "Optivem School Dashboard",
+   **domains `learn.optivem.com` AND `optivem-learn.pages.dev`** (both, so the raw Pages URL isn't a
+   back-door), IdP = GitHub.
+4. **Policy** "Students and admins", Action Allow, **Include**: GitHub→Teams→`optivem`→`optivem-students`
+   **+ Emails → the admin's email** (so admin gets in while the team is still empty).
+5. **Test** incognito → both URLs prompt GitHub login; admin gets in, non-member denied.
+   - ⚠️ Gotcha: GitHub→Teams rule needs the OAuth app authorized to read `optivem` org teams (approve as
+     org owner on first login / grant if org restricts OAuth apps), else the team rule admits nobody.
+
+### After Access works (agent can do these)
+- **Populate `optivem-students` from `config/students.json`** (15 students) — `gh api` to add members.
+  Hold until Access is verified (avoids premature team invites). Handles: `jcupac, longhibeck, ognjenkl,
+  CurlyFire, RomainChamb, jasonribble, anilvv1, david-oc-miller, ndeleva-armedia, sowmiya-thoguluva,
+  Andrijana-N, astevanovski, gerasovskiboris, anatrajkovskaarmedia, vilosia-ai`.
+
+### Other open follow-ups
+- ⚠️ **Renew `PROJECT_TOKEN` before 2026-06-17** (expires in 5 days) — it powers all 5 hub workflows
+  *and* the CF build token; expiry breaks automation + dashboard builds. Use a long-expiry, read-only
+  token for CF ideally.
+- **Step 5 — Thinkific → `students.json` sync** (manual now, automatic later).
+- **Step 7 — flip hub private 2026-07-02**; verify gated `learn.optivem.com` still serves (CF doesn't
+  need Pages). After that, `optivem.github.io/hub` (the redirect) stops serving — fine.
+- Optional cosmetic: dashboard disclaimer lost the personal "DM Valentina on Thinkific" link in the
+  generalization — restore via config/template if wanted.
+- gh CLI can't create PRs on the `optivem` org (push works) — direct-to-`main` is the workflow here.
+
 ## Decision 1 — which repo is the real deployment?
 
 - **A (recommended): `optivem/hub`.** It's the live system with the real roster, courses, and board
