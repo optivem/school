@@ -10,7 +10,7 @@ name: dashboard
 
 on:
   workflow_run:
-    workflows: [auto-on-created, auto-on-closed, auto-on-comment, auto-on-reopened]
+    workflows: [auto-on-created, auto-on-closed, auto-on-comment, auto-on-reopened, auto-on-deleted]
     types: [completed]
   discussion:
     types: [pinned, unpinned, edited, deleted]

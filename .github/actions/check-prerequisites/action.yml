@@ -1,0 +1,118 @@
+name: Check Module Prerequisites
+description: Verifies that the previous module is "Done" before allowing a new ticket. Reads project board fields (Course, Sandbox Project, Module, Status).
+
+inputs:
+  project-key:
+    description: The sandbox project key (e.g. "BDOK").
+    required: true
+  course-id:
+    description: The course id (e.g. "atdd", "pipeline").
+    required: true
+  module-num:
+    description: The module number (e.g. "02").
+    required: true
+  github-token:
+    description: Token with project read access.
+    required: true
+
+outputs:
+  allowed:
+    description: "'true' if the previous module is complete or this is module 1."
+    value: ${{ steps.check.outputs.allowed }}
+  incomplete-module:
+    description: "The previous module name if it is not yet complete."
+    value: ${{ steps.check.outputs.incomplete_module }}
+
+runs:
+  using: composite
+  steps:
+    - name: Check prerequisites
+      id: check
+      uses: actions/github-script@v9
+      env:
+        # Pass inputs via env (NOT interpolated into the script) so values
+        # can't break or inject JS.
+        GH_TOKEN: ${{ inputs.github-token }}
+        PROJECT_KEY: ${{ inputs.project-key }}
+        COURSE_ID: ${{ inputs.course-id }}
+        MODULE_NUM: ${{ inputs.module-num }}
+      with:
+        github-token: ${{ inputs.github-token }}
+        script: |
+          const { loadConfig } = require('./scripts/load-config.cjs');
+          const config = loadConfig('.');
+          const projectId = config.board.id;
+          const checkCourseField = (config.board.courses?.length || 0) > 1;
+          const courseId = process.env.COURSE_ID;
+          const courseFieldValue = courseId.toUpperCase();
+          const projectKey = (process.env.PROJECT_KEY || '').toUpperCase();
+          const moduleNum = process.env.MODULE_NUM;
+
+          const course = config.courses.find(c => c.id === courseId);
+          if (!course) {
+            core.setOutput('allowed', 'true');
+            core.setOutput('incomplete_module', '');
+            return;
+          }
+
+          const moduleIndex = course.modules.findIndex(m => m.number === moduleNum);
+          if (moduleIndex <= 0) {
+            // First module or not found — no prerequisites
+            core.setOutput('allowed', 'true');
+            core.setOutput('incomplete_module', '');
+            return;
+          }
+
+          const prevModule = course.modules[moduleIndex - 1];
+          const prevModuleName = `${prevModule.number} - ${prevModule.name}`;
+
+          let cursor = null;
+          let prevStatus = null;
+          outer: while (true) {
+            const data = await github.graphql(`
+              query($projectId: ID!, $after: String) {
+                node(id: $projectId) {
+                  ... on ProjectV2 {
+                    items(first: 100, after: $after) {
+                      pageInfo { hasNextPage endCursor }
+                      nodes {
+                        course: fieldValueByName(name: "Course") {
+                          ... on ProjectV2ItemFieldSingleSelectValue { name }
+                        }
+                        sandboxProject: fieldValueByName(name: "Sandbox Project") {
+                          ... on ProjectV2ItemFieldSingleSelectValue { name }
+                        }
+                        module: fieldValueByName(name: "Module") {
+                          ... on ProjectV2ItemFieldSingleSelectValue { name }
+                        }
+                        status: fieldValueByName(name: "Status") {
+                          ... on ProjectV2ItemFieldSingleSelectValue { name }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            `, { projectId, after: cursor });
+            const page = data.node.items;
+            for (const item of page.nodes) {
+              if (checkCourseField && item.course?.name !== courseFieldValue) continue;
+              const sp = item.sandboxProject?.name;
+              const mod = item.module?.name;
+              if (!sp || !mod) continue;
+              if (sp.split(' — ')[0].toUpperCase() !== projectKey) continue;
+              if (mod.split(' - ')[0] !== prevModule.number) continue;
+              prevStatus = item.status?.name || '';
+              break outer;
+            }
+            if (!page.pageInfo.hasNextPage) break;
+            cursor = page.pageInfo.endCursor;
+          }
+
+          if (prevStatus === 'Done') {
+            core.setOutput('allowed', 'true');
+            core.setOutput('incomplete_module', '');
+          } else {
+            core.setOutput('allowed', 'false');
+            core.setOutput('incomplete_module', prevModuleName);
+          }

@@ -1,0 +1,33 @@
+name: Assign Issue
+description: Assigns team members to an issue.
+
+inputs:
+  issue-number:
+    description: The issue number.
+    required: true
+  assignees:
+    description: Comma-separated list of GitHub usernames.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Assign
+      uses: actions/github-script@v9
+      env:
+        # Pass inputs via env (NOT interpolated into the script) so values
+        # can't break or inject JS.
+        ISSUE_NUMBER: ${{ inputs.issue-number }}
+        ASSIGNEES: ${{ inputs.assignees }}
+      with:
+        script: |
+          const assignees = process.env.ASSIGNEES
+            .split(',')
+            .map(a => a.trim())
+            .filter(Boolean);
+          await github.rest.issues.addAssignees({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: Number(process.env.ISSUE_NUMBER),
+            assignees
+          });
