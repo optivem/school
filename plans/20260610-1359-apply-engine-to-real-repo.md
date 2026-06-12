@@ -52,13 +52,12 @@ into school (so the two diverge).
 ## Steps
 
 1. **Confirm Decision 1** (hub vs new repo).
-2. **Decide which hub extras to keep**, then **port them into `optivem/school`** (so school is the
-   superset and stays the source of truth):
-   - `auto-on-edited` (re-validate on body edit), `auto-on-deleted` (remove from board) — likely keep.
-   - `nudge-unanswered-discussions` — keep if you use Discussions nudges.
-   - `add-assignee`/`assign-issue`/`remove-assignee`, `set-milestone`, `check-prerequisites` — keep only
-     if actually used (several are commented out in hub). Generalize any hub-specific bits.
-   - Re-test each against `school-test`.
+2. **Port ALL hub extras into `optivem/school`** (Decision 2 — full superset, `school ⊇ hub`):
+   - `auto-on-edited` (assignee/milestone lockdown guard), `auto-on-deleted` (log),
+     `nudge-unanswered-discussions`.
+   - `add-assignee`, `remove-assignee`, `set-milestone`, plus `assign-issue` and `check-prerequisites`
+     (port the latter two dormant/commented, matching hub). Generalize any hub-specific bits.
+   - Re-test each against `school-test`; harden any still carrying the `${{ inputs }}`-inline bug.
 3. **Backport the hardening** by virtue of step 2 + `apply`: hub's shared actions get school's
    env-based (injection-safe) versions, schema validation, reason-based reject, `init`/`sync`/`apply`,
    content-hash dashboard. (Hub has the same latent injection bug — low risk today since hub project
@@ -70,7 +69,7 @@ into school (so the two diverge).
    **Thinkific → `students.json`** sync (manual now, automatic later — see engine plan).
 6. **Hosting cutover (Pages → Cloudflare), before the 2026-07-02 privacy flip:**
    - Stand up **Cloudflare Pages** for hub (build serves `docs/`), **Cloudflare Access** gating, and the
-     **`school.optivem.com`** custom domain (CNAME at Bluehost — see `sites/CONTRIBUTING.md` account-level
+     **`learn.optivem.com`** custom domain (CNAME at Bluehost — see `sites/CONTRIBUTING.md` account-level
      DNS note).
    - Switch hub's `dashboard.yml` to the **Cloudflare-commit** model (school's version) and **remove the
      GitHub-Pages deploy**.
@@ -78,7 +77,7 @@ into school (so the two diverge).
      whitelist) — the deferred item; the team doubles as the repo-access list and can sync to
      `students.json`.
 7. **Flip hub private (2026-07-02)** per the parked privacy plan. By then Cloudflare must be serving the
-   dashboard (Pages would die). Verify the gated dashboard at `school.optivem.com`.
+   dashboard (Pages would die). Verify the gated dashboard at `learn.optivem.com`.
 8. **End-to-end verify on hub:** a real (or test) submission flows create → review → done; dashboard
    refreshes; Access gate holds.
 
@@ -91,12 +90,26 @@ into school (so the two diverge).
   future engine updates propagate.
 - **Access on a Bluehost-CNAME'd custom domain** — verify (fallback: delegate subdomain to Cloudflare).
 
-## Open questions
+## Decisions (LOCKED 2026-06-12)
 
-- **Confirm target = `hub`** (vs new repo).
-- **Which hub extras to keep / port** (assignees, milestones, prereqs, nudge-discussions).
-- **GitHub IdP + `school-students` team** setup (callback `https://optivem.cloudflareaccess.com/cdn-cgi/access/callback`).
-- **Custom domain:** `school.optivem.com` (confirm) + the CNAME at Bluehost.
+1. **Target repo = `optivem/hub`.** Hub becomes *the* real Optivem School instance (real roster,
+   courses, board #18); engine updates propagate in via `apply`. In-place upgrade, de-risked by the
+   branch + PR dry-run (step 4).
+2. **Port EVERYTHING into `school` — full superset (`school ⊇ hub`).** Port all hub extras, including
+   ones currently dead/commented, so school is the complete source of truth and `apply` stays clean:
+   - **Workflows:** `auto-on-edited` (assignee/milestone lockdown guard), `auto-on-deleted` (log),
+     `nudge-unanswered-discussions`.
+   - **Actions:** `add-assignee`, `remove-assignee`, `set-milestone` (used by `auto-on-edited`), plus
+     `assign-issue` and `check-prerequisites` (currently commented out in hub's `auto-on-created` — port
+     them too, kept dormant/commented, so school matches hub exactly).
+   - Re-test each against `school-test`; harden any with the `${{ inputs }}`-inline injection bug.
+3. **Access gating = GitHub IdP + `school-students` team.** Cloudflare Access uses GitHub as IdP;
+   allow-list = `school-students` team members. Team doubles as repo-access list and can sync to
+   `students.json`. Callback `https://optivem.cloudflareaccess.com/cdn-cgi/access/callback`.
+4. **Custom domain = `learn.optivem.com`** (single domain — supersedes the earlier `school.`/`app.` split).
+   Named for the activity (student-facing), pairs with `circle.optivem.com` (membership/brand). The v1
+   dashboard and any future v2 live app share this one origin. CNAME at Bluehost → `<project>.pages.dev`.
+   Must be live + Access-gated **before hub goes private 2026-07-02**.
 
 ## Relationship to other plans
 

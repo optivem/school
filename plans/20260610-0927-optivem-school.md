@@ -62,7 +62,7 @@
   added to a **GitHub Projects v2** board with a **Status** field (Open / In Progress / In Review / Done).
 - **Automation = GitHub Actions** (validate, dedupe, add-to-board, set fields, status transitions).
 - **Read surface = a generated static dashboard** (`generate-dashboard.mjs` → `docs/index.html`), like
-  hub — but hosted on **Cloudflare Pages + Cloudflare Access** at `school.optivem.com`.
+  hub — but hosted on **Cloudflare Pages + Cloudflare Access** at `learn.optivem.com`.
 - **Q&A** = issue comments / tickets (hub's model); a Discussions layer is optional, not core.
 - **Distribution = template repo** ("Use this template") — self-host without forking.
 
@@ -77,9 +77,11 @@
 - **Repo visibility:** **`optivem/school` stays PUBLIC** (the AGPL platform code/template, so others can
   self-host) · **`optivem/hub` goes PRIVATE** (the real student *data*). The dashboard reflects hub's
   private data → gated by Access.
-- **Domain:** `school.optivem.com` for the v1 dashboard (reserve `app.optivem.com` for the v2 live app).
-  No domain registration — add the custom domain in the Cloudflare Pages project + one **CNAME at
-  Bluehost** (`school` → `<project>.pages.dev`). DNS stays at Bluehost; nothing registered on Cloudflare.
+- **Domain:** `learn.optivem.com` — single student-facing domain (DECIDED 2026-06-12; supersedes the
+  earlier `school.`/`app.` split). The v1 dashboard and any future v2 live app share this one origin; it
+  pairs with `circle.optivem.com` (membership/brand). No domain registration — add the custom domain in
+  the Cloudflare Pages project + one **CNAME at Bluehost** (`learn` → `<project>.pages.dev`). DNS stays at
+  Bluehost; nothing registered on Cloudflare.
 - ⚠️ **Verify at go-live:** Cloudflare Access on a Pages custom domain whose DNS is at Bluehost. Fallback:
   delegate the subdomain to Cloudflare, or gate via the v2 OAuth layer.
 
@@ -135,12 +137,12 @@ and installable by anyone.
   - **Permissions:** `Discussions: read` + `Metadata: read` for v1 (add `Discussions: write` / `Issues`
     when in-app posting + review-status writes land).
 - **Single-tenant deployment:** configured once with the repo (`optivem/hub`), Installation ID, the
-  course→category map, and the roster source. Served at **`app.optivem.com`**.
+  course→category map, and the roster source. Served at **`learn.optivem.com`**.
 - **Others run their own (self-host via template — NOT a fork, NOT SaaS):** `optivem/school` is a
   **GitHub template repo**. Someone else clicks **"Use this template"** (or a "Deploy to Cloudflare"
   button) → gets a **fresh, independent repo** (no fork link) → registers **their own** GitHub App →
   points it at **their own** repo → deploys to **their own** Cloudflare. Their instance is fully theirs
-  and single-tenant. **You host only your own** (`optivem/hub` → `app.optivem.com`) and operate nothing
+  and single-tenant. **You host only your own** (`optivem/hub` → `learn.optivem.com`) and operate nothing
   for anyone else. AGPL guarantees they always have the source to do this.
 
 ## Authorization model (the heart of the product)
@@ -263,8 +265,8 @@ Effectively **$0** at this scale, on top of the domain you already own:
 ## Decisions & remaining open questions
 
 **Decided:**
-- **App home → `app.optivem.com`** (dedicated subdomain, clean security boundary). Callback =
-  `https://app.optivem.com/auth/callback`.
+- **App home → `learn.optivem.com`** (single student-facing subdomain, clean security boundary). Callback =
+  `https://learn.optivem.com/auth/callback`.
 - **License → AGPL-3.0** + a **CLA** (so contributions don't block a future dual/commercial license).
 - **Repo → public from the start.**
 - **Auth → single public GitHub App, one install on `optivem/hub`** (single-tenant; public only for
@@ -283,7 +285,7 @@ Effectively **$0** at this scale, on top of the domain you already own:
     HTML committed; no repo churn.
   - **B: commit `docs/` from a workflow.** Simpler, but the generator stamps a fresh version/timestamp
     each run → a commit every refresh (noisy). Would need a content-hash version to avoid churn.
-- **Cloudflare Access** policy (allow-list) + the `school.optivem.com` CNAME at Bluehost.
+- **Cloudflare Access** policy (GitHub IdP + `school-students` team) + the `learn.optivem.com` CNAME at Bluehost.
 
 > **Build status (2026-06-10):** the whole engine is built + **live-tested** against `school-test` board
 > #26 — config + schema validation, `init`/`sync`/`apply`, board create+reconcile, the full submission
