@@ -86,13 +86,14 @@ into school (so the two diverge).
    - ✅ **hub `dashboard.yml` switched to model A** (`a5a68f8`) — POSTs the CF deploy hook
      (`CF_DEPLOY_HOOK` secret) on every `auto-on-*` completion + 30-min safety net; GitHub-Pages deploy
      removed. Verified: ticket lifecycle → CF rebuild → dashboard updates.
-   - ✅ **Old URL redirect** (`ee2fa0b`) — `optivem.github.io/hub` now serves a static "we've moved" page
-     (Pages switched to branch `main`/`docs` deploy) pointing at `optivem-learn.pages.dev`.
-     **TODO: repoint the redirect (and CF custom domain) from `optivem-learn.pages.dev` →
-     `learn.optivem.com` once the custom domain + DNS are live** (the two URLs in `hub/docs/index.html`).
-     (The redirect only serves until 2026-07-02 — Pages dies on Free+private.)
-   - ⏭ **Remaining (you, in Cloudflare/Bluehost):** add `learn.optivem.com` custom domain in CF Pages +
-     CNAME at Bluehost; set up **Cloudflare Access** (GitHub IdP + `optivem-students` team).
+   - ✅ **Custom domain `learn.optivem.com` LIVE** — CF Pages custom domain + CNAME at Bluehost
+     (`learn` → `optivem-learn.pages.dev`); HTTP 200, valid TLS, serving the dashboard.
+   - ✅ **Old URL redirect** (`ee2fa0b`, repointed `e437f45`) — `optivem.github.io/hub` serves a static
+     "we've moved" page (Pages switched to branch `main`/`docs` deploy) → **`https://learn.optivem.com/`**.
+     (Only serves until 2026-07-02 — Pages dies on Free+private.)
+   - ⏭ **Remaining (you, in Cloudflare):** set up **Cloudflare Access** on `learn.optivem.com`
+     (+ `optivem-learn.pages.dev`) — GitHub IdP + `optivem-students` team. ⚠️ `learn.optivem.com` is
+     currently **public + ungated** (shows student data) until Access is applied.
    - Gate Access with **GitHub IdP + the `optivem-students` team**, synced from `students.json`. **The team
      has NO repo access** — purely an identity group for Access (giving students hub repo access would leak
      other students' private data once hub is private). ✅ Team created 2026-06-12 (`optivem-students`, no
