@@ -79,17 +79,28 @@ into school (so the two diverge).
      SHOP sandbox kept for future testing.
 5. **Roster:** keep hub's real `config/` (students/reviewers/projects/courses, board #18). Wire the
    **Thinkific → `students.json`** sync (manual now, automatic later — see engine plan).
-6. **Hosting cutover (Pages → Cloudflare), before the 2026-07-02 privacy flip:**
-   - Stand up **Cloudflare Pages** for hub (build serves `docs/`), **Cloudflare Access** gating, and the
-     **`learn.optivem.com`** custom domain (CNAME at Bluehost — see `sites/CONTRIBUTING.md` account-level
-     DNS note).
-   - Switch hub's `dashboard.yml` to the **Cloudflare-commit** model (school's version) and **remove the
-     GitHub-Pages deploy**.
-   - Gate Access with **GitHub IdP + the `optivem-students` team** (single sign-on + GitHub-username
-     whitelist), synced from `students.json`. **The team has NO repo access** — it is purely an identity
-     group for Access (giving students hub repo access would leak other students' private data once hub is
-     private). ✅ Team created 2026-06-12 (`optivem-students`, no repo permission, empty — populate from
-     `students.json` at cutover).
+6. **Hosting cutover (Pages → Cloudflare), before the 2026-07-02 privacy flip** — IN PROGRESS:
+   - ✅ **Cloudflare Pages live** (`optivem-learn` project) — builds `generate-dashboard.mjs` (**model A**,
+     not the commit model — see engine plan), serving at **`optivem-learn.pages.dev`**. Build env vars:
+     `GITHUB_TOKEN` (read-only), `GITHUB_OWNER=optivem`, `GITHUB_REPO=hub`, `NODE_VERSION=20`.
+   - ✅ **hub `dashboard.yml` switched to model A** (`a5a68f8`) — POSTs the CF deploy hook
+     (`CF_DEPLOY_HOOK` secret) on every `auto-on-*` completion + 30-min safety net; GitHub-Pages deploy
+     removed. Verified: ticket lifecycle → CF rebuild → dashboard updates.
+   - ✅ **Old URL redirect** (`ee2fa0b`) — `optivem.github.io/hub` now serves a static "we've moved" page
+     (Pages switched to branch `main`/`docs` deploy) pointing at `optivem-learn.pages.dev`.
+     **TODO: repoint the redirect (and CF custom domain) from `optivem-learn.pages.dev` →
+     `learn.optivem.com` once the custom domain + DNS are live** (the two URLs in `hub/docs/index.html`).
+     (The redirect only serves until 2026-07-02 — Pages dies on Free+private.)
+   - ⏭ **Remaining (you, in Cloudflare/Bluehost):** add `learn.optivem.com` custom domain in CF Pages +
+     CNAME at Bluehost; set up **Cloudflare Access** (GitHub IdP + `optivem-students` team).
+   - Gate Access with **GitHub IdP + the `optivem-students` team**, synced from `students.json`. **The team
+     has NO repo access** — purely an identity group for Access (giving students hub repo access would leak
+     other students' private data once hub is private). ✅ Team created 2026-06-12 (`optivem-students`, no
+     repo permission, empty — populate from `students.json` at cutover).
+   - ⚠️ **Incident (fixed):** adding the SHOP option via `sync-project --add` wiped the **Sandbox Project**
+     field on all 48 tickets (the option-list rewrite recreated option IDs, orphaning item values) →
+     dashboard went blank. Fixed: backfilled all 48 from issue titles, and patched `sync-project.mjs` to
+     pass existing option **ids** so updates preserve values (`f1ad325` hub / school engine).
 7. **Flip hub private (2026-07-02)** per the parked privacy plan. By then Cloudflare must be serving the
    dashboard (Pages would die). Verify the gated dashboard at `learn.optivem.com`.
 8. **End-to-end verify on hub:** a real (or test) submission flows create → review → done; dashboard
