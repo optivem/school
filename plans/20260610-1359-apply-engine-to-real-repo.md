@@ -85,9 +85,11 @@ into school (so the two diverge).
      DNS note).
    - Switch hub's `dashboard.yml` to the **Cloudflare-commit** model (school's version) and **remove the
      GitHub-Pages deploy**.
-   - Gate Access with **GitHub IdP + a `school-students` team** (single sign-on + GitHub-username
-     whitelist) — the deferred item; the team doubles as the repo-access list and can sync to
-     `students.json`.
+   - Gate Access with **GitHub IdP + the `optivem-students` team** (single sign-on + GitHub-username
+     whitelist), synced from `students.json`. **The team has NO repo access** — it is purely an identity
+     group for Access (giving students hub repo access would leak other students' private data once hub is
+     private). ✅ Team created 2026-06-12 (`optivem-students`, no repo permission, empty — populate from
+     `students.json` at cutover).
 7. **Flip hub private (2026-07-02)** per the parked privacy plan. By then Cloudflare must be serving the
    dashboard (Pages would die). Verify the gated dashboard at `learn.optivem.com`.
 8. **End-to-end verify on hub:** a real (or test) submission flows create → review → done; dashboard
@@ -115,9 +117,11 @@ into school (so the two diverge).
      `assign-issue` and `check-prerequisites` (currently commented out in hub's `auto-on-created` — port
      them too, kept dormant/commented, so school matches hub exactly).
    - Re-test each against `school-test`; harden any with the `${{ inputs }}`-inline injection bug.
-3. **Access gating = GitHub IdP + `school-students` team.** Cloudflare Access uses GitHub as IdP;
-   allow-list = `school-students` team members. Team doubles as repo-access list and can sync to
-   `students.json`. Callback `https://optivem.cloudflareaccess.com/cdn-cgi/access/callback`.
+3. **Access gating = GitHub IdP + `optivem-students` team.** Cloudflare Access uses GitHub as IdP;
+   allow-list = `optivem-students` team members, synced from `students.json`. The team has **no repo
+   access** (identity-only, to avoid leaking student data once hub is private). Named `optivem-students`
+   (not `school-`) since "School" is the platform brand. Callback
+   `https://optivem.cloudflareaccess.com/cdn-cgi/access/callback`.
 4. **Custom domain = `learn.optivem.com`** (single domain — supersedes the earlier `school.`/`app.` split).
    Named for the activity (student-facing), pairs with `circle.optivem.com` (membership/brand). The v1
    dashboard and any future v2 live app share this one origin. CNAME at Bluehost → `<project>.pages.dev`.

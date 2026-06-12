@@ -285,7 +285,7 @@ Effectively **$0** at this scale, on top of the domain you already own:
     HTML committed; no repo churn.
   - **B: commit `docs/` from a workflow.** Simpler, but the generator stamps a fresh version/timestamp
     each run → a commit every refresh (noisy). Would need a content-hash version to avoid churn.
-- **Cloudflare Access** policy (GitHub IdP + `school-students` team) + the `learn.optivem.com` CNAME at Bluehost.
+- **Cloudflare Access** policy (GitHub IdP + `optivem-students` team, no repo access) + the `learn.optivem.com` CNAME at Bluehost.
 
 > **Build status (2026-06-10):** the whole engine is built + **live-tested** against `school-test` board
 > #26 — config + schema validation, `init`/`sync`/`apply`, board create+reconcile, the full submission
