@@ -52,12 +52,17 @@ into school (so the two diverge).
 ## Steps
 
 1. **Confirm Decision 1** (hub vs new repo).
-2. **Port ALL hub extras into `optivem/school`** (Decision 2 — full superset, `school ⊇ hub`):
+2. **Port ALL hub extras into `optivem/school`** (Decision 2 — full superset, `school ⊇ hub`) —
+   ✅ **DONE 2026-06-12** (commit `81c9c07`):
    - `auto-on-edited` (assignee/milestone lockdown guard), `auto-on-deleted` (log),
-     `nudge-unanswered-discussions`.
-   - `add-assignee`, `remove-assignee`, `set-milestone`, plus `assign-issue` and `check-prerequisites`
-     (port the latter two dormant/commented, matching hub). Generalize any hub-specific bits.
-   - Re-test each against `school-test`; harden any still carrying the `${{ inputs }}`-inline bug.
+     `nudge-unanswered-discussions` — each given the `check-configured` gate; `dashboard.yml` now
+     refreshes on `auto-on-deleted` via `workflow_run`.
+   - `add-assignee`, `remove-assignee`, `set-milestone`, `assign-issue`, `check-prerequisites` — all
+     hardened (string inputs passed via `env:`, closing the `${{ inputs }}`-inline injection bug).
+     `assign-issue`/`check-prerequisites` stay dormant (commented in `auto-on-created`, matching hub).
+   - **Live-tested on `school-test`** (applied + pushed): assignee guard reverts + warns ✅, milestone
+     guard clears + warns ✅, `auto-on-deleted` logs ✅, `nudge` dry-run runs ✅. (`assign-issue` /
+     `check-prerequisites` validated by `node --check` + board-field-name match, not live — dormant.)
 3. **Backport the hardening** by virtue of step 2 + `apply`: hub's shared actions get school's
    env-based (injection-safe) versions, schema validation, reason-based reject, `init`/`sync`/`apply`,
    content-hash dashboard. (Hub has the same latent injection bug — low risk today since hub project
