@@ -63,13 +63,20 @@ into school (so the two diverge).
    - **Live-tested on `school-test`** (applied + pushed): assignee guard reverts + warns ✅, milestone
      guard clears + warns ✅, `auto-on-deleted` logs ✅, `nudge` dry-run runs ✅. (`assign-issue` /
      `check-prerequisites` validated by `node --check` + board-field-name match, not live — dormant.)
-3. **Backport the hardening** by virtue of step 2 + `apply`: hub's shared actions get school's
-   env-based (injection-safe) versions, schema validation, reason-based reject, `init`/`sync`/`apply`,
-   content-hash dashboard. (Hub has the same latent injection bug — low risk today since hub project
-   names have no apostrophes, but fix it.)
-4. **Dry-run the apply against a hub branch** (while hub is still public + low-stakes): `apply` the
-   school engine onto a `school-engine` branch of hub, open a PR, diff carefully, run the workflows on
-   the branch if possible. Do **not** disturb hub's real config (`apply` never touches `config/*.json`).
+3. **Backport the hardening** by virtue of step 2 + `apply` — ✅ **DONE 2026-06-12** (hub `93444af`):
+   hub's shared actions now have school's env-based (injection-safe) versions, schema-validating
+   `load-config`, reason-based reject, `init`/`sync`/`apply`, content-hash dashboard.
+4. **Apply the school engine onto hub** — ✅ **DONE 2026-06-12** (hub `93444af`, direct to `main`):
+   - `node scripts/apply.mjs` from `school@81c9c07`; reviewed diff offline (new `load-config` validates
+     hub's real config — 15 students / 8 projects / 2 courses, Schema OK). `config/*.json` untouched.
+   - **`dashboard.yml` held back** — hub keeps its GitHub-Pages deploy until the hosting cutover (step 6).
+   - Did a `school-engine` branch + dry-run first, then merged direct to `main` (PRs aren't the workflow
+     here; gh also can't create PRs on the org — push works, see memory). Branch deleted.
+   - **End-to-end verified on LIVE hub** via a dedicated **`SHOP` (Optivem Shop) sandbox project** added to
+     config (`098eaba`; lead `valentinajemuovic`, team `[valentinajemuovic, jcupac]`, repo `optivem/shop`,
+     Pipeline course; board #18 reconciled): create → **In Review** (fields + title set) ✅ → reviewer
+     comment → **In Progress** ✅ → close → **Done** ✅ → delete → `auto-on-deleted` ✅. Test issue removed;
+     SHOP sandbox kept for future testing.
 5. **Roster:** keep hub's real `config/` (students/reviewers/projects/courses, board #18). Wire the
    **Thinkific → `students.json`** sync (manual now, automatic later — see engine plan).
 6. **Hosting cutover (Pages → Cloudflare), before the 2026-07-02 privacy flip:**
