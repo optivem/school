@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Optivem School — portal mockups</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#13131f; --ink-2:#3b3b52; --muted:#71718c; --faint:#9a9ab0;
+    --line:#e7e7ef; --line-2:#eef0f5; --bg:#f4f4f8; --card:#ffffff;
+    --brand:#5b4be0; --brand-2:#7c6ff0; --brand-soft:#efecfd;
+    --green:#1aa06d; --green-soft:#e3f6ee;
+    --amber:#c98a16; --amber-soft:#fbf1dd;
+    --blue:#2f6df0; --blue-soft:#e7f0ff;
+    --rose:#d8456a; --rose-soft:#fde7ee;
+    --radius:16px; --shadow:0 1px 2px rgba(20,20,40,.04), 0 12px 32px -12px rgba(30,25,70,.18);
+    --shadow-sm:0 1px 2px rgba(20,20,40,.05), 0 4px 12px -6px rgba(30,25,70,.12);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink);
+    background:
+      radial-gradient(1200px 600px at 80% -10%, #ece9fe 0%, transparent 55%),
+      radial-gradient(900px 500px at -5% 5%, #e6f0ff 0%, transparent 50%),
+      var(--bg);
+    -webkit-font-smoothing:antialiased;
+  }
+  .board{max-width:1180px; margin:0 auto; padding:48px 28px 80px}
+  .board-head{margin-bottom:40px}
+  .eyebrow{font-size:12px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--brand); margin:0 0 10px}
+  .board-head h1{font-size:30px; font-weight:800; letter-spacing:-.02em; margin:0 0 8px}
+  .board-head p{color:var(--muted); font-size:15px; max-width:680px; line-height:1.55; margin:0}
+  .legend{display:flex; flex-wrap:wrap; gap:8px; margin-top:18px}
+  .pill{font-size:12px; font-weight:600; padding:5px 11px; border-radius:999px; background:#fff; border:1px solid var(--line); color:var(--ink-2); display:inline-flex; gap:6px; align-items:center}
+  .pill .dot{width:7px;height:7px;border-radius:50%}
+
+  .frame-label{display:flex; align-items:baseline; gap:10px; margin:44px 0 14px}
+  .frame-label .n{font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:500; color:#fff; background:var(--brand); border-radius:6px; padding:3px 8px}
+  .frame-label h2{font-size:17px; font-weight:700; margin:0; letter-spacing:-.01em}
+  .frame-label span{font-size:13px; color:var(--muted)}
+
+  .frame{background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); border:1px solid rgba(20,20,40,.04); overflow:hidden}
+  .browserbar{display:flex; align-items:center; gap:8px; padding:11px 16px; background:#fbfbfd; border-bottom:1px solid var(--line-2)}
+  .browserbar .dots{display:flex; gap:6px}
+  .browserbar .dots i{width:11px;height:11px;border-radius:50%;display:block}
+  .browserbar .url{flex:1; font-size:12.5px; color:var(--muted); background:#fff; border:1px solid var(--line); border-radius:8px; padding:5px 12px; display:flex; align-items:center; gap:8px; font-family:'JetBrains Mono',monospace}
+  .browserbar .url svg{flex:none}
+  .lockclr{color:var(--green)}
+
+  /* ---------- App shell ---------- */
+  .app{display:flex; min-height:560px}
+  .side{width:230px; flex:none; background:#fbfafe; border-right:1px solid var(--line-2); padding:18px 14px; display:flex; flex-direction:column}
+  .brand{display:flex; align-items:center; gap:10px; padding:6px 8px 18px}
+  .brand .logo{width:30px;height:30px;border-radius:9px; background:linear-gradient(135deg,var(--brand),var(--brand-2)); display:grid; place-items:center; color:#fff; font-weight:800; font-size:15px; box-shadow:0 4px 12px -4px var(--brand)}
+  .brand b{font-size:15px; font-weight:700; letter-spacing:-.01em}
+  .brand small{display:block; color:var(--faint); font-size:11px; font-weight:500; letter-spacing:.02em}
+  .nav-lab{font-size:10.5px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--faint); padding:14px 10px 7px}
+  .nav-item{display:flex; align-items:center; gap:11px; padding:9px 10px; border-radius:10px; font-size:13.5px; font-weight:500; color:var(--ink-2); cursor:pointer; margin-bottom:2px}
+  .nav-item svg{flex:none; opacity:.7}
+  .nav-item:hover{background:#f1eefc}
+  .nav-item.active{background:var(--brand); color:#fff}
+  .nav-item.active svg{opacity:1}
+  .nav-item .count{margin-left:auto; font-size:11px; font-weight:700; background:rgba(0,0,0,.06); color:var(--ink-2); border-radius:999px; padding:1px 8px}
+  .nav-item.active .count{background:rgba(255,255,255,.22); color:#fff}
+  .side-foot{margin-top:auto; border-top:1px solid var(--line-2); padding-top:12px; display:flex; align-items:center; gap:10px}
+  .avatar{width:32px;height:32px;border-radius:50%; display:grid; place-items:center; font-size:12px; font-weight:700; color:#fff; flex:none}
+  .side-foot .who{font-size:12.5px; font-weight:600; line-height:1.2}
+  .side-foot .who small{display:block; color:var(--faint); font-weight:500; font-size:11px}
+  .idp-badge{display:inline-flex; align-items:center; gap:4px; font-size:10px; font-weight:600; color:var(--muted); background:#fff; border:1px solid var(--line); border-radius:999px; padding:2px 7px; margin-top:3px}
+
+  .main{flex:1; min-width:0; display:flex; flex-direction:column}
+  .topbar{display:flex; align-items:center; gap:14px; padding:18px 26px; border-bottom:1px solid var(--line-2)}
+  .topbar h3{font-size:18px; font-weight:700; margin:0; letter-spacing:-.01em}
+  .topbar .sub{font-size:13px; color:var(--muted)}
+  .search{margin-left:auto; display:flex; align-items:center; gap:8px; background:#f5f5fa; border:1px solid var(--line); border-radius:10px; padding:7px 12px; font-size:13px; color:var(--faint); width:210px}
+  .content{padding:24px 26px; overflow:auto}
+
+  /* course cards */
+  .grid{display:grid; grid-template-columns:repeat(2,1fr); gap:16px}
+  .course-card{border:1px solid var(--line); border-radius:14px; padding:18px; cursor:pointer; transition:.15s; background:#fff; position:relative; overflow:hidden}
+  .course-card:hover{box-shadow:var(--shadow-sm); transform:translateY(-2px); border-color:#dcd8f6}
+  .course-card .accent{position:absolute; inset:0 auto 0 0; width:4px}
+  .cc-top{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:14px}
+  .cc-tag{font-size:11px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:3px 9px; border-radius:6px}
+  .course-card h4{font-size:16px; font-weight:700; margin:0 0 3px; letter-spacing:-.01em}
+  .course-card .mods{font-size:12.5px; color:var(--muted)}
+  .ring{--p:0; width:46px;height:46px;flex:none; border-radius:50%;
+        background:conic-gradient(var(--brand) calc(var(--p)*1%), #ececf4 0); display:grid; place-items:center}
+  .ring i{width:34px;height:34px;border-radius:50%;background:#fff; display:grid; place-items:center; font-size:11px; font-weight:700; color:var(--ink); font-style:normal}
+  .cc-foot{display:flex; align-items:center; gap:14px; margin-top:16px; padding-top:14px; border-top:1px solid var(--line-2); font-size:12.5px; color:var(--muted)}
+  .cc-foot .it{display:flex; align-items:center; gap:6px}
+  .cc-foot b{color:var(--ink-2); font-weight:600}
+  .badge-dot{width:8px;height:8px;border-radius:50%}
+
+  /* course detail tabs */
+  .tabs{display:flex; gap:4px; padding:0 26px; border-bottom:1px solid var(--line-2)}
+  .tab{padding:13px 14px; font-size:13.5px; font-weight:600; color:var(--muted); cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-1px; display:flex; align-items:center; gap:7px}
+  .tab:hover{color:var(--ink-2)}
+  .tab.active{color:var(--brand); border-bottom-color:var(--brand)}
+  .tab .count{font-size:11px; font-weight:700; background:var(--brand-soft); color:var(--brand); border-radius:999px; padding:1px 7px}
+  .pane{display:none}
+  .pane.show{display:block}
+
+  /* Q&A */
+  .ask{display:flex; gap:12px; align-items:center; background:#faf9ff; border:1px dashed #d6d0f5; border-radius:12px; padding:13px 16px; margin-bottom:20px}
+  .ask .av{width:34px;height:34px}
+  .ask input{flex:1; border:none; background:transparent; font-size:13.5px; color:var(--ink-2); outline:none}
+  .ask input::placeholder{color:var(--faint)}
+  .ask .go{background:var(--brand); color:#fff; border:none; font-weight:600; font-size:13px; padding:9px 16px; border-radius:9px; cursor:pointer}
+  .gate-note{display:flex; align-items:center; gap:8px; font-size:12px; color:var(--green); background:var(--green-soft); border-radius:8px; padding:8px 12px; margin-bottom:18px; font-weight:500}
+
+  .q{border:1px solid var(--line); border-radius:13px; padding:16px 18px; margin-bottom:14px}
+  .q.answered{border-color:#cdeddd}
+  .q-head{display:flex; gap:12px; align-items:flex-start}
+  .q-head .av{width:36px;height:36px}
+  .q-meta{flex:1; min-width:0}
+  .q-meta .qtitle{font-size:14.5px; font-weight:700; margin:0 0 3px; letter-spacing:-.005em}
+  .q-meta .byline{font-size:12px; color:var(--muted)}
+  .q-status{font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; white-space:nowrap}
+  .st-answered{background:var(--green-soft); color:var(--green)}
+  .st-open{background:var(--amber-soft); color:var(--amber)}
+  .q-body{font-size:13.5px; color:var(--ink-2); line-height:1.6; margin:12px 0 0; padding-left:48px}
+  .q-body code{font-family:'JetBrains Mono',monospace; font-size:12px; background:#f3f1fb; color:#5a4fcf; padding:1px 6px; border-radius:5px}
+  pre.code{font-family:'JetBrains Mono',monospace; font-size:12px; line-height:1.55; background:#1c1b2e; color:#d6d3f0; padding:13px 15px; border-radius:9px; margin:11px 0 0; overflow:auto}
+  pre.code .k{color:#c792ea} pre.code .s{color:#a5e0a0} pre.code .c{color:#6b6a8a}
+  .answer{margin:14px 0 0 48px; padding:14px 16px; background:linear-gradient(180deg,#f6f4ff,#fbfaff); border:1px solid #e3def8; border-left:3px solid var(--brand); border-radius:10px}
+  .answer .ah{display:flex; align-items:center; gap:9px; margin-bottom:8px}
+  .answer .ah .av{width:28px;height:28px;font-size:11px}
+  .answer .ah b{font-size:13px}
+  .answer .ah .inst{font-size:10px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:#fff; background:var(--brand); padding:2px 7px; border-radius:5px}
+  .answer .ah time{margin-left:auto; font-size:11.5px; color:var(--faint)}
+  .answer p{font-size:13.5px; color:var(--ink-2); line-height:1.6; margin:0}
+  .q-foot{display:flex; gap:18px; padding-left:48px; margin-top:12px; font-size:12px; color:var(--muted)}
+  .q-foot span{display:flex; align-items:center; gap:6px}
+
+  /* reviews */
+  .rev{display:flex; align-items:center; gap:16px; border:1px solid var(--line); border-radius:13px; padding:15px 18px; margin-bottom:12px}
+  .rev .key{font-family:'JetBrains Mono',monospace; font-weight:600; font-size:13px; color:var(--ink); background:#f3f1fb; border-radius:7px; padding:6px 11px; flex:none}
+  .rev .info{flex:1; min-width:0}
+  .rev .info h4{margin:0 0 2px; font-size:14px; font-weight:600}
+  .rev .info .pr{font-size:12px; color:var(--muted); font-family:'JetBrains Mono',monospace; display:flex; align-items:center; gap:6px}
+  .rev-state{font-size:11.5px; font-weight:700; padding:5px 12px; border-radius:999px; display:inline-flex; align-items:center; gap:6px; white-space:nowrap}
+  .rs-approved{background:var(--green-soft); color:var(--green)}
+  .rs-changes{background:var(--rose-soft); color:var(--rose)}
+  .rs-review{background:var(--blue-soft); color:var(--blue)}
+  .rs-draft{background:#eee; color:var(--muted)}
+  .ext{font-size:12px; color:var(--brand); font-weight:600; display:inline-flex; align-items:center; gap:5px; white-space:nowrap; cursor:pointer}
+  .rev .sub{font-size:12px;color:var(--muted);margin-top:1px}
+  .rev .attempt{font-family:'JetBrains Mono',monospace}
+  .revx{border:1px solid #f0cfcf;border-radius:13px;margin-bottom:12px;overflow:hidden;background:#fffdfd}
+  .revx .hd{display:flex;align-items:center;gap:16px;padding:15px 18px}
+  .revx .hd .info{flex:1;min-width:0}
+  .revx .hd .info h4{margin:0 0 2px;font-size:14px;font-weight:600}
+  .revx .hd .info .sub{font-size:12px;color:var(--muted)}
+  .revx .codewrap{margin:0 18px;border-radius:9px;overflow:hidden;position:relative}
+  .revx pre.code{margin:0;border-radius:0}
+  .revx pre.code .hl{background:rgba(216,69,106,.16);display:block;margin:0 -15px;padding:0 15px;border-left:2px solid var(--rose)}
+  .revx .il{display:flex;gap:11px;padding:14px 18px}
+  .revx .il .av{width:30px;height:30px;flex:none}
+  .revx .il .ic{flex:1;min-width:0}
+  .revx .il .ic .h{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+  .revx .il .ic .h b{font-size:13px}
+  .revx .il .ic .h time{margin-left:auto;font-size:11.5px;color:var(--faint)}
+  .revx .il .ic p{margin:0;font-size:13px;color:var(--ink-2);line-height:1.55}
+  .revx .il .ic p code{font-family:'JetBrains Mono',monospace;font-size:11.5px;background:#f0edf9;color:#5a4fcf;padding:1px 5px;border-radius:4px}
+  .revx .foot{display:flex;gap:18px;padding:0 18px 14px;font-size:12.5px;color:var(--muted)}
+  .revx .foot .a{color:var(--brand);font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px}
+
+  /* progress pane */
+  .modlist{border:1px solid var(--line); border-radius:13px; overflow:hidden}
+  .mod{display:flex; align-items:center; gap:14px; padding:14px 18px; border-bottom:1px solid var(--line-2)}
+  .mod:last-child{border-bottom:none}
+  .mod .ck{width:24px;height:24px;border-radius:50%;flex:none; display:grid; place-items:center}
+  .ck.done{background:var(--green); color:#fff}
+  .ck.now{background:#fff; border:2px solid var(--brand); color:var(--brand)}
+  .ck.todo{background:#f1f1f6; border:2px solid var(--line); color:var(--faint)}
+  .mod .mnum{font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--faint); width:24px}
+  .mod h4{margin:0; font-size:14px; font-weight:600}
+  .mod.todo h4{color:var(--muted); font-weight:500}
+  .mod .mstate{margin-left:auto; font-size:12px; color:var(--muted)}
+
+  /* ---------- Login frame ---------- */
+  .login{display:grid; place-items:center; padding:56px 20px; background:
+      radial-gradient(700px 360px at 50% -20%, #ece9fe, transparent 60%), #fff; min-height:480px}
+  .login-card{width:380px; background:#fff; border:1px solid var(--line); border-radius:18px; box-shadow:var(--shadow); padding:36px 34px; text-align:center}
+  .login .logo{width:54px;height:54px;border-radius:15px; background:linear-gradient(135deg,var(--brand),var(--brand-2)); display:grid;place-items:center; color:#fff; font-weight:800; font-size:24px; margin:0 auto 18px; box-shadow:0 10px 24px -8px var(--brand)}
+  .login h3{font-size:20px; font-weight:800; margin:0 0 6px; letter-spacing:-.02em}
+  .login p{font-size:13.5px; color:var(--muted); margin:0 0 26px; line-height:1.5}
+  .oauth{display:flex; align-items:center; justify-content:center; gap:11px; width:100%; padding:12px; border-radius:11px; font-size:14px; font-weight:600; cursor:pointer; border:1px solid var(--line); background:#fff; color:var(--ink); margin-bottom:11px}
+  .oauth:hover{background:#fafafd}
+  .oauth.gh{background:#1c1b29; color:#fff; border-color:#1c1b29}
+  .oauth.gh:hover{background:#2a2940}
+  .login .or{display:flex; align-items:center; gap:12px; color:var(--faint); font-size:12px; margin:6px 0}
+  .login .or:before,.login .or:after{content:""; flex:1; height:1px; background:var(--line)}
+  .login .foot{margin-top:24px; font-size:11.5px; color:var(--faint); line-height:1.5}
+  .login .foot b{color:var(--muted); font-weight:600}
+
+  .note{font-size:12.5px; color:var(--muted); margin:10px 2px 0; line-height:1.5; display:flex; gap:8px}
+  .note svg{flex:none; margin-top:1px; color:var(--brand)}
+  /* video / lesson */
+  .lesson{display:flex; gap:0}
+  .lesson .lessons-nav{width:248px; flex:none; border-right:1px solid var(--line-2); padding:14px 10px; background:#fbfafe}
+  .lesson .lessons-nav .nl{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);padding:8px 10px}
+  .lrow{display:flex; align-items:center; gap:10px; padding:9px 10px; border-radius:9px; font-size:13px; color:var(--ink-2); cursor:pointer; margin-bottom:1px}
+  .lrow:hover{background:#f1eefc}
+  .lrow.active{background:#fff; box-shadow:var(--shadow-sm); font-weight:600}
+  .lrow .lk{width:20px;height:20px;border-radius:50%;flex:none;display:grid;place-items:center;font-size:10px;font-weight:700}
+  .lk.done{background:var(--green);color:#fff} .lk.now{background:var(--brand);color:#fff} .lk.todo{background:#eceaf6;color:var(--faint)}
+  .lrow .dur{margin-left:auto;font-size:11px;color:var(--faint);font-family:'JetBrains Mono',monospace}
+  .player-wrap{flex:1; min-width:0; padding:22px 26px}
+  .player{position:relative; aspect-ratio:16/9; border-radius:14px; overflow:hidden; background:
+      radial-gradient(120% 120% at 30% 20%, #2a2740, #16151f); display:grid; place-items:center; box-shadow:0 20px 40px -20px rgba(20,15,50,.5)}
+  .player .play{width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.16); backdrop-filter:blur(6px); display:grid;place-items:center; border:1px solid rgba(255,255,255,.25); cursor:pointer}
+  .player .play:hover{background:rgba(255,255,255,.26)}
+  .player .scrub{position:absolute;left:0;right:0;bottom:0;padding:14px 16px;display:flex;align-items:center;gap:12px}
+  .player .bar{flex:1;height:4px;border-radius:3px;background:rgba(255,255,255,.25);position:relative}
+  .player .bar i{position:absolute;left:0;top:0;bottom:0;width:34%;background:var(--brand-2);border-radius:3px}
+  .player .t{font-size:11px;color:rgba(255,255,255,.8);font-family:'JetBrains Mono',monospace}
+  .player .stream-tag{position:absolute;top:12px;left:14px;font-size:10.5px;font-weight:600;color:#fff;background:rgba(0,0,0,.35);backdrop-filter:blur(4px);border-radius:6px;padding:4px 9px;display:flex;align-items:center;gap:6px}
+  .player .signed{position:absolute;top:12px;right:14px;font-size:10.5px;font-weight:600;color:#cdeddd;background:rgba(26,160,109,.22);border:1px solid rgba(26,160,109,.4);border-radius:6px;padding:4px 9px;display:flex;align-items:center;gap:5px}
+  .lesson-h{display:flex;align-items:center;gap:12px;margin:18px 0 6px}
+  .lesson-h h3{font-size:19px;font-weight:700;margin:0;letter-spacing:-.01em}
+  .lesson-h .ch{font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace;background:#f3f1fb;padding:3px 9px;border-radius:6px}
+  .lesson-sub{color:var(--muted);font-size:13.5px;line-height:1.55;margin:0 0 18px}
+  .lesson-ask{display:flex;gap:11px;align-items:center;background:#faf9ff;border:1px dashed #d6d0f5;border-radius:12px;padding:12px 15px}
+  .lesson-ask svg.q{flex:none;color:var(--brand)}
+  .lesson-ask input{flex:1;border:none;background:transparent;font-size:13.5px;outline:none;color:var(--ink-2)}
+  .lesson-ask input::placeholder{color:var(--faint)}
+  .lesson-ask .go{background:var(--brand);color:#fff;border:none;font-weight:600;font-size:13px;padding:8px 15px;border-radius:9px;cursor:pointer}
+
+  /* pricing */
+  .seg{display:inline-flex;background:#f1f1f6;border-radius:11px;padding:4px;gap:3px;margin-bottom:24px}
+  .seg button{border:none;background:transparent;font-size:13px;font-weight:600;color:var(--muted);padding:8px 18px;border-radius:8px;cursor:pointer}
+  .seg button.on{background:#fff;color:var(--ink);box-shadow:var(--shadow-sm)}
+  .price-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:18px}
+  .pcard{border:1px solid var(--line);border-radius:16px;padding:24px;position:relative}
+  .pcard.featured{border-color:#cfc8f5;box-shadow:0 18px 40px -22px rgba(60,45,150,.35)}
+  .pcard .ribbon{position:absolute;top:-11px;right:20px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#fff;background:var(--brand);padding:4px 11px;border-radius:7px}
+  .pcard .ptag{font-size:12.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--brand)}
+  .pcard h4{font-size:18px;font-weight:700;margin:6px 0 2px}
+  .pcard .blurb{font-size:13px;color:var(--muted);line-height:1.5;margin:0 0 16px}
+  .pcard .amt{font-size:34px;font-weight:800;letter-spacing:-.02em}
+  .pcard .amt small{font-size:14px;font-weight:600;color:var(--muted)}
+  .pcard .ex{font-size:12px;color:var(--faint);margin:2px 0 18px}
+  .pcard ul{list-style:none;padding:0;margin:0 0 20px}
+  .pcard li{font-size:13px;color:var(--ink-2);display:flex;gap:9px;align-items:flex-start;padding:6px 0}
+  .pcard li svg{flex:none;color:var(--green);margin-top:2px}
+  .buy{width:100%;padding:13px;border-radius:11px;font-size:14px;font-weight:700;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px}
+  .buy.primary{background:var(--brand);color:#fff} .buy.primary:hover{background:#4d3fce}
+  .buy.ghost{background:#fff;border:1px solid var(--line);color:var(--ink)} .buy.ghost:hover{background:#fafafd}
+  .b2b-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 16px}
+  .b2b-fields .f{border:1px solid var(--line);border-radius:9px;padding:8px 11px;font-size:12.5px;color:var(--faint);background:#fbfbfd}
+  .b2b-fields .f.full{grid-column:1/-1}
+  .b2b-fields .f b{display:block;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin-bottom:3px}
+  .b2b-fields .f span{color:var(--ink-2);font-weight:500}
+  .tax-note{display:flex;gap:9px;align-items:flex-start;font-size:12px;color:var(--muted);background:#f6f8fa;border:1px solid var(--line-2);border-radius:10px;padding:11px 13px;margin-top:16px;line-height:1.5}
+  .tax-note svg{flex:none;color:var(--blue);margin-top:1px}
+  .powered{display:flex;align-items:center;gap:7px;justify-content:center;font-size:11.5px;color:var(--faint);margin-top:14px}
+
+  /* live events */
+  .ev-hero{position:relative; border-radius:16px; overflow:hidden; padding:24px 26px; color:#fff; margin-bottom:24px;
+      background:radial-gradient(120% 140% at 85% 10%, #6d5ef2, #4334b8 60%, #2c2280)}
+  .ev-hero .live{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.25);padding:4px 11px;border-radius:999px}
+  .ev-hero .live i{width:7px;height:7px;border-radius:50%;background:#ff6b6b;box-shadow:0 0 0 0 rgba(255,107,107,.6);animation:pulse 1.6s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,107,107,.6)}70%{box-shadow:0 0 0 7px rgba(255,107,107,0)}100%{box-shadow:0 0 0 0 rgba(255,107,107,0)}}
+  .ev-hero h3{font-size:22px;font-weight:800;letter-spacing:-.02em;margin:14px 0 6px}
+  .ev-hero .when{font-size:13.5px;color:rgba(255,255,255,.82);display:flex;gap:16px;flex-wrap:wrap}
+  .ev-hero .when span{display:flex;align-items:center;gap:7px}
+  .ev-hero .cta{margin-top:18px;display:flex;gap:10px;align-items:center}
+  .ev-hero .join{background:#fff;color:#3a2db0;border:none;font-weight:700;font-size:13.5px;padding:10px 20px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:8px}
+  .ev-hero .reg{font-size:12.5px;color:rgba(255,255,255,.8)}
+  .ev-hero .brand-chip{position:absolute;top:20px;right:24px;font-size:11px;font-weight:600;color:rgba(255,255,255,.85);display:flex;align-items:center;gap:7px}
+  .ev-hero .brand-chip .c{width:18px;height:18px;border-radius:50%;border:2px solid rgba(255,255,255,.7)}
+
+  .bk-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 14px}
+  .bk-head h4{font-size:15px;font-weight:700;margin:0}
+  .bk-head h4 span{color:var(--faint);font-weight:500}
+  .bk-sort{font-size:12px;color:var(--muted);display:flex;gap:6px;align-items:center;background:#f5f5fa;border:1px solid var(--line);border-radius:8px;padding:6px 11px}
+  .ask-ev{display:flex;gap:11px;align-items:center;background:#faf9ff;border:1px dashed #d6d0f5;border-radius:12px;padding:12px 15px;margin-bottom:18px}
+  .ask-ev input{flex:1;border:none;background:transparent;font-size:13.5px;outline:none;color:var(--ink-2)}
+  .ask-ev input::placeholder{color:var(--faint)}
+  .ask-ev .go{background:var(--brand);color:#fff;border:none;font-weight:600;font-size:13px;padding:8px 15px;border-radius:9px;cursor:pointer}
+  .bk{display:flex;gap:14px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:10px}
+  .bk.answered{background:#fbfdfc;border-color:#d7eee2}
+  .upvote{flex:none;width:48px;display:flex;flex-direction:column;align-items:center;gap:2px;border:1px solid var(--line);border-radius:10px;padding:7px 0;cursor:pointer;background:#fff}
+  .upvote.on{border-color:var(--brand);background:var(--brand-soft);color:var(--brand)}
+  .upvote svg{display:block}
+  .upvote b{font-size:14px;font-weight:700}
+  .upvote small{font-size:9.5px;color:var(--faint);text-transform:uppercase;letter-spacing:.05em}
+  .upvote.on small{color:var(--brand)}
+  .bk .body{flex:1;min-width:0}
+  .bk .body p{margin:0 0 6px;font-size:13.5px;color:var(--ink);line-height:1.5}
+  .bk .body .by{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:8px}
+  .bk .stt{font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;white-space:nowrap;flex:none}
+  .stt-pending{background:var(--amber-soft);color:var(--amber)}
+  .stt-answered{background:var(--green-soft);color:var(--green)}
+  .stt-live{background:#ffe9ec;color:#d8456a}
+  .past-evs{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:8px}
+  .pev{border:1px solid var(--line);border-radius:12px;overflow:hidden;cursor:pointer}
+  .pev .thumb{aspect-ratio:16/9;background:radial-gradient(120% 120% at 30% 20%,#2a2740,#16151f);display:grid;place-items:center;position:relative}
+  .pev .thumb .pl{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.18);display:grid;place-items:center;border:1px solid rgba(255,255,255,.3)}
+  .pev .thumb .len{position:absolute;bottom:8px;right:9px;font-size:10.5px;color:#fff;background:rgba(0,0,0,.5);border-radius:5px;padding:2px 7px;font-family:'JetBrains Mono',monospace}
+  .pev .cap{padding:11px 13px}
+  .pev .cap h5{margin:0 0 3px;font-size:13px;font-weight:600}
+  .pev .cap .d{font-size:11.5px;color:var(--faint)}
+
+  /* account / billing */
+  .acard{border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin-bottom:18px}
+  .acard .ah2{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 3px}
+  .acard h4{font-size:15px;font-weight:700;margin:0}
+  .acard .desc{font-size:12.5px;color:var(--muted);margin:0 0 16px}
+  .edit-link{font-size:12.5px;font-weight:600;color:var(--brand);cursor:pointer;display:flex;align-items:center;gap:6px;white-space:nowrap}
+  .frow{display:grid;grid-template-columns:150px 1fr;gap:14px;align-items:center;padding:11px 0;border-top:1px solid var(--line-2)}
+  .frow:first-of-type{border-top:none}
+  .frow>label{font-size:12.5px;color:var(--muted);font-weight:500}
+  .finput{border:1px solid var(--line);border-radius:9px;padding:9px 12px;font-size:13.5px;color:var(--ink);background:#fff;display:flex;align-items:center;gap:8px}
+  .finput.ro{background:#f7f7fb;color:var(--ink-2);border-style:dashed}
+  .finput.focus{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}
+  .vat-ok{font-size:11px;font-weight:700;color:var(--green);background:var(--green-soft);padding:2px 8px;border-radius:999px;margin-left:auto;display:inline-flex;align-items:center;gap:4px}
+  .save-row{display:flex;gap:10px;margin-top:18px;align-items:center}
+  .btn-save{background:var(--brand);color:#fff;border:none;font-weight:600;font-size:13px;padding:9px 18px;border-radius:9px;cursor:pointer}
+  .btn-cancel{background:#fff;border:1px solid var(--line);font-weight:600;font-size:13px;padding:9px 16px;border-radius:9px;cursor:pointer;color:var(--ink-2)}
+  .save-row .hint{font-size:11.5px;color:var(--faint);margin-left:auto;display:flex;align-items:center;gap:6px;max-width:300px;line-height:1.4}
+  .inv-table{width:100%;border-collapse:collapse}
+  .inv-table th{text-align:left;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);padding:0 12px 10px}
+  .inv-table td{font-size:13px;color:var(--ink-2);padding:13px 12px;border-top:1px solid var(--line-2);vertical-align:middle}
+  .inv-table tr td:first-child{font-weight:600;color:var(--ink);font-family:'JetBrains Mono',monospace;font-size:12px}
+  .inv-amt{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--ink)}
+  .inv-paid{font-size:11px;font-weight:700;color:var(--green);background:var(--green-soft);padding:3px 9px;border-radius:999px}
+  .inv-open{font-size:11px;font-weight:700;color:var(--amber);background:var(--amber-soft);padding:3px 9px;border-radius:999px}
+  .inv-dl{color:var(--brand);font-weight:600;font-size:12.5px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+
+  @media(max-width:760px){ .grid,.price-grid,.past-evs{grid-template-columns:1fr} .side,.lessons-nav{display:none} .frow{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+<div class="board">
+
+  <div class="board-head">
+    <p class="eyebrow">Optivem School · learn.optivem.com</p>
+    <h1>Unified student portal — UI mockups</h1>
+    <p>One gated app: a student logs in with GitHub <em>or</em> Google, sees only the courses they're enrolled
+       in, browses a <em>shared per-course Q&amp;A board</em> you answer inline, submits sandbox work for
+       <em>in-portal review</em>, watches lesson video, and joins live events — all in one place, no clicking
+       out. Backed by Cloudflare Access (login) + Pages Functions + D1 (data) + Stream (video).</p>
+    <div class="legend">
+      <span class="pill"><span class="dot" style="background:var(--brand)"></span> Access JWT identity</span>
+      <span class="pill"><span class="dot" style="background:var(--green)"></span> Per-course gated</span>
+      <span class="pill"><span class="dot" style="background:var(--blue)"></span> In-portal reviews (not PRs)</span>
+      <span class="pill"><span class="dot" style="background:var(--amber)"></span> Shared Q&amp;A in D1</span>
+    </div>
+  </div>
+
+  <!-- ============ FRAME 1 — LOGIN ============ -->
+  <div class="frame-label"><span class="n">01</span><h2>Login gate</h2><span>Cloudflare Access — GitHub + Google, allow-list = roster email</span></div>
+  <div class="frame">
+    <div class="browserbar">
+      <div class="dots"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div>
+      <div class="url"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="lockclr"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> learn.optivem.com</div>
+    </div>
+    <div class="login">
+      <div class="login-card">
+        <div class="logo">S</div>
+        <h3>Welcome to Optivem School</h3>
+        <p>Sign in to reach your courses, questions, and sandbox reviews.</p>
+        <button class="oauth gh">
+          <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+          Continue with GitHub
+        </button>
+        <div class="or">or</div>
+        <button class="oauth">
+          <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#4285F4" d="M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z"/><path fill="#34A853" d="M24 46c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.1-7.45 2.1-5.73 0-10.58-3.87-12.31-9.07H4.34v5.7C7.96 41.07 15.4 46 24 46z"/><path fill="#FBBC05" d="M11.69 28.18C11.25 26.86 11 25.45 11 24s.25-2.86.69-4.18v-5.7H4.34C2.85 17.09 2 20.45 2 24c0 3.55.85 6.91 2.34 9.88l7.35-5.7z"/><path fill="#EA4335" d="M24 10.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 4.18 29.93 2 24 2 15.4 2 7.96 6.93 4.34 14.12l7.35 5.7c1.73-5.2 6.58-9.07 12.31-9.07z"/></svg>
+          Continue with Google
+        </button>
+        <div class="foot">Access is granted to emails on the <b>course roster</b> only.<br>Either provider works — your verified email is the key.</div>
+      </div>
+    </div>
+  </div>
+  <p class="note"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg> No auth code to build — Cloudflare Access handles both IdPs and passes the verified identity to the app as a signed JWT.</p>
+
+  <!-- ============ FRAME 2 — HOME ============ -->
+  <div class="frame-label"><span class="n">02</span><h2>Home — My Courses</h2><span>Auth-scoped: only this student's enrollments (from D1)</span></div>
+  <div class="frame">
+    <div class="browserbar">
+      <div class="dots"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div>
+      <div class="url"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="lockclr"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> learn.optivem.com/home</div>
+    </div>
+    <div class="app">
+      <aside class="side">
+        <div class="brand"><div class="logo">S</div><div><b>Optivem School</b><small>Learning portal</small></div></div>
+        <div class="nav-lab">Menu</div>
+        <div class="nav-item active"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg> My Courses</div>
+        <div class="nav-item"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> My Questions <span class="count">3</span></div>
+        <div class="nav-item"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> My Reviews <span class="count">2</span></div>
+        <div class="side-foot">
+          <div class="avatar" style="background:linear-gradient(135deg,#e8742c,#f2a65a)">JC</div>
+          <div class="who">Jakub Cupać<small>jcupac</small><div class="idp-badge"><svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.68-.01-1.34-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg> via GitHub</div></div>
+        </div>
+      </aside>
+      <div class="main">
+        <div class="topbar"><div><h3>My Courses</h3><div class="sub">2 active enrollments · keep going 👋</div></div>
+          <div class="search"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg> Search…</div>
+        </div>
+        <div class="content">
+          <div class="grid">
+            <!-- TDD -->
+            <div class="course-card" onclick="document.getElementById('detail').scrollIntoView({behavior:'smooth'})">
+              <div class="accent" style="background:var(--brand)"></div>
+              <div class="cc-top">
+                <div><span class="cc-tag" style="background:var(--brand-soft);color:var(--brand)">In progress</span>
+                  <h4 style="margin-top:10px">TDD Fundamentals</h4><div class="mods">4 of 6 modules complete</div></div>
+                <div class="ring" style="--p:66"><i>66%</i></div>
+              </div>
+              <div class="cc-foot">
+                <span class="it"><span class="badge-dot" style="background:var(--amber)"></span> <b>1</b> open question</span>
+                <span class="it"><span class="badge-dot" style="background:var(--blue)"></span> <b>1</b> review in progress</span>
+              </div>
+            </div>
+            <!-- Pipeline -->
+            <div class="course-card">
+              <div class="accent" style="background:var(--green)"></div>
+              <div class="cc-top">
+                <div><span class="cc-tag" style="background:var(--green-soft);color:var(--green)">In progress</span>
+                  <h4 style="margin-top:10px">Pipeline &amp; CI/CD</h4><div class="mods">2 of 5 modules complete</div></div>
+                <div class="ring" style="--p:40"><i>40%</i></div>
+              </div>
+              <div class="cc-foot">
+                <span class="it"><span class="badge-dot" style="background:var(--green)"></span> <b>0</b> open questions</span>
+                <span class="it"><span class="badge-dot" style="background:var(--green)"></span> <b>1</b> approved review</span>
+              </div>
+            </div>
+          </div>
+          <p class="note"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg> A student enrolled only in these two courses will never see any other course's Q&amp;A or reviews — gating is <code style="font-family:'JetBrains Mono';font-size:11px">WHERE course_id IN (my enrollments)</code> in D1.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ FRAME 3 — COURSE DETAIL (tabbed) ============ -->
+  <div class="frame-label"><span class="n">03</span><h2>Course detail — everything in one place</h2><span>Progress · Q&amp;A · Reviews — no click-out</span></div>
+  <div class="frame" id="detail">
+    <div class="browserbar">
+      <div class="dots"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div>
+      <div class="url"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="lockclr"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> learn.optivem.com/courses/tdd-fundamentals</div>
+    </div>
+    <div class="app">
+      <aside class="side">
+        <div class="brand"><div class="logo">S</div><div><b>Optivem School</b><small>Learning portal</small></div></div>
+        <div class="nav-lab">My Courses</div>
+        <div class="nav-item active"><span class="badge-dot" style="background:var(--brand)"></span> TDD Fundamentals</div>
+        <div class="nav-item"><span class="badge-dot" style="background:var(--green)"></span> Pipeline &amp; CI/CD</div>
+        <div class="nav-lab">Menu</div>
+        <div class="nav-item"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg> All courses</div>
+        <div class="side-foot">
+          <div class="avatar" style="background:linear-gradient(135deg,#e8742c,#f2a65a)">JC</div>
+          <div class="who">Jakub Cupać<small>jcupac</small></div>
+        </div>
+      </aside>
+      <div class="main">
+        <div class="topbar"><div><h3>TDD Fundamentals</h3><div class="sub">Module 4 of 6 · Red, Green, Refactor</div></div>
+          <div class="ring" style="--p:66; width:40px;height:40px"><i style="width:30px;height:30px;font-size:10px">66%</i></div>
+        </div>
+        <div class="tabs">
+          <div class="tab" data-tab="prog" onclick="pick(this)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg> Progress</div>
+          <div class="tab active" data-tab="qa" onclick="pick(this)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Q&amp;A <span class="count">3</span></div>
+          <div class="tab" data-tab="rev" onclick="pick(this)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> My Reviews <span class="count">1</span></div>
+        </div>
+        <div class="content">
+
+          <!-- Q&A pane -->
+          <div class="pane show" data-pane="qa">
+            <div class="gate-note"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg> Questions from <b style="margin:0 4px">everyone enrolled in TDD Fundamentals</b> — a shared board (gated to this course). One answer helps the whole cohort.</div>
+            <div class="ask">
+              <div class="avatar av" style="background:linear-gradient(135deg,#e8742c,#f2a65a)">JC</div>
+              <input placeholder="Ask a question about this course…">
+              <button class="go">Ask</button>
+            </div>
+
+            <!-- answered (another student's question) -->
+            <div class="q answered">
+              <div class="q-head">
+                <div class="avatar av" style="background:linear-gradient(135deg,#2f8f6f,#54b894)">RC</div>
+                <div class="q-meta">
+                  <p class="qtitle">Should I assert on the exception message or just the type?</p>
+                  <div class="byline">Romain Chambard · Module 03 · 2 days ago</div>
+                </div>
+                <span class="q-status st-answered">✓ Answered</span>
+              </div>
+              <div class="q-body">When testing the validation, I'm doing <code>assertThrows(ValidationException.class, …)</code> — but should I also assert on the message text?</div>
+              <div class="answer">
+                <div class="ah"><div class="avatar av" style="background:linear-gradient(135deg,var(--brand),var(--brand-2))">VJ</div><b>Valentina Jemuović</b><span class="inst">Instructor</span><time>1 day ago</time></div>
+                <p>Assert on the <b>type</b> for behaviour, and the <b>message</b> only when the message itself is part of the contract (e.g. an API error a caller depends on). Over-asserting on free-text messages makes tests brittle. Lock the type; let refactors move the wording.</p>
+              </div>
+            </div>
+
+            <!-- open with code (the logged-in student's own question — shown to the cohort) -->
+            <div class="q">
+              <div class="q-head">
+                <div class="avatar av" style="background:linear-gradient(135deg,#e8742c,#f2a65a)">JC</div>
+                <div class="q-meta">
+                  <p class="qtitle">Red step passes immediately — what am I missing? <span style="font-size:11px;font-weight:700;color:var(--brand);background:var(--brand-soft);padding:1px 7px;border-radius:5px;vertical-align:middle">You</span></p>
+                  <div class="byline">Jakub Cupać · Module 04 · 5 hours ago</div>
+                </div>
+                <span class="q-status st-open">● Awaiting answer</span>
+              </div>
+              <div class="q-body">My first failing test is green on the first run. Is my test not actually exercising the new behaviour?
+                <pre class="code"><span class="c">// expecting RED here, but it's green</span>
+<span class="k">it</span>(<span class="s">'rejects an empty cart'</span>, () => {
+  <span class="k">expect</span>(checkout([])).<span class="k">toThrow</span>();
+});</pre>
+              </div>
+              <div class="q-foot"><span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> 14 in this cohort can see this</span><span>👍 6</span><span>💬 2 replies</span></div>
+            </div>
+
+            <!-- another answered, terse (another student) -->
+            <div class="q answered">
+              <div class="q-head">
+                <div class="avatar av" style="background:linear-gradient(135deg,#7a5bd0,#a589e8)">ST</div>
+                <div class="q-meta">
+                  <p class="qtitle">Is it OK to refactor the test itself during the Refactor step?</p>
+                  <div class="byline">Sowmiya Thoguluva · Module 02 · 6 days ago</div>
+                </div>
+                <span class="q-status st-answered">✓ Answered</span>
+              </div>
+              <div class="answer" style="margin-top:14px">
+                <div class="ah"><div class="avatar av" style="background:linear-gradient(135deg,var(--brand),var(--brand-2))">VJ</div><b>Valentina Jemuović</b><span class="inst">Instructor</span><time>5 days ago</time></div>
+                <p>Yes — tests are code too. Refactor them under a green bar, one change at a time, re-running after each. Just don't refactor test <em>and</em> production code in the same red→green→refactor cycle.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Progress pane -->
+          <div class="pane" data-pane="prog">
+            <div class="modlist">
+              <div class="mod"><div class="ck done">✓</div><span class="mnum">01</span><h4>Introduction</h4><span class="mstate">Completed</span></div>
+              <div class="mod"><div class="ck done">✓</div><span class="mnum">02</span><h4>Red, Green, Refactor</h4><span class="mstate">Completed</span></div>
+              <div class="mod"><div class="ck done">✓</div><span class="mnum">03</span><h4>Test doubles &amp; isolation</h4><span class="mstate">Completed</span></div>
+              <div class="mod"><div class="ck done">✓</div><span class="mnum">04a</span><h4>Assertions in depth</h4><span class="mstate">Completed</span></div>
+              <div class="mod"><div class="ck now">▸</div><span class="mnum">04</span><h4>Refactoring under green</h4><span class="mstate" style="color:var(--brand);font-weight:600">In progress</span></div>
+              <div class="mod todo"><div class="ck todo">5</div><span class="mnum">05</span><h4>Outside-in TDD</h4><span class="mstate">Not started</span></div>
+              <div class="mod todo"><div class="ck todo">6</div><span class="mnum">06</span><h4>Capstone: the SHOP kata</h4><span class="mstate">Not started</span></div>
+            </div>
+          </div>
+
+          <!-- Reviews pane — in-platform, NOT GitHub PRs -->
+          <div class="pane" data-pane="rev">
+            <!-- Sandbox instructions — visible to EVERYONE enrolled (member or not) -->
+            <div class="acard" style="margin-bottom:14px">
+              <div class="ah2"><h4>🧪 Sandbox: the SHOP kata</h4><span class="edit-link" style="color:var(--muted);cursor:default"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg> Everyone enrolled can read this</span></div>
+              <p class="desc" style="margin-bottom:10px">Build a checkout for the Optivem Shop using strict TDD. Work in your own repo, commit each cycle.</p>
+              <ul style="margin:0;padding-left:18px;font-size:13px;color:var(--ink-2);line-height:1.75">
+                <li>Reject an empty cart with a <em>typed</em> error</li>
+                <li>Apply per-line discounts, then tax</li>
+                <li>One behaviour per red → green → refactor cycle</li>
+              </ul>
+            </div>
+
+            <!-- Circle membership gate: MEMBER view -->
+            <div style="display:flex;align-items:center;gap:11px;background:linear-gradient(135deg,#5b4be0,#7c6ff0);color:#fff;border-radius:12px;padding:12px 16px;margin-bottom:16px">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M12 2l2.9 6.3 6.8.7-5.1 4.6 1.5 6.7L12 17l-6 3.6 1.5-6.7L2.4 9l6.8-.7z"/></svg>
+              <div style="flex:1"><b style="font-size:13.5px">You're an Optivem Circle member</b> <span style="opacity:.85;font-size:12.5px">— code reviews &amp; live events unlocked.</span></div>
+              <span style="font-size:11px;font-weight:700;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);padding:3px 10px;border-radius:999px">CIRCLE</span>
+            </div>
+
+            <p class="note" style="margin-top:0;margin-bottom:14px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg> You work in <b style="margin:0 3px">your own repo</b> and connect it once — then submit attempts here for inline review. No pull requests.</p>
+            <!-- connected sandbox project -->
+            <div style="display:flex;align-items:center;gap:13px;border:1px solid #cdeddd;background:#f6fcf9;border-radius:12px;padding:12px 16px;margin-bottom:18px">
+              <svg width="20" height="20" viewBox="0 0 16 16" fill="#1aa06d"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.24.49-2.71-1.08-2.71-1.08-.36-.93-.89-1.18-.89-1.18-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.72 1.23 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:13.5px;font-weight:600">Sandbox connected — <span style="font-family:'JetBrains Mono',monospace;font-size:12.5px">github.com/jcupac/shop-kata</span></div>
+                <div style="font-size:12px;color:var(--muted)">Read-only via the Optivem GitHub App · a submission pulls your latest commit for review</div>
+              </div>
+              <span class="rev-state rs-approved">✓ Connected</span>
+              <a class="ext">Manage</a>
+            </div>
+
+            <!-- expanded in-portal review with inline instructor comment -->
+            <div class="revx">
+              <div class="hd">
+                <div class="key">SHOP-12</div>
+                <div class="info"><h4>Checkout: reject empty cart</h4><div class="sub">Submitted 3h ago · attempt 2 · <span style="font-family:'JetBrains Mono'">checkout.test.js</span></div></div>
+                <span class="rev-state rs-changes">⟳ Changes requested</span>
+              </div>
+              <div class="codewrap">
+                <pre class="code"><span class="k">it</span>(<span class="s">'rejects an empty cart'</span>, () => {
+<span class="hl">  <span class="k">expect</span>(checkout([])).<span class="k">toThrow</span>();</span>
+});</pre>
+              </div>
+              <div class="il">
+                <div class="avatar av" style="background:linear-gradient(135deg,var(--brand),var(--brand-2))">VJ</div>
+                <div class="ic">
+                  <div class="h"><b>Valentina Jemuović</b><span class="inst" style="font-size:10px;font-weight:700;text-transform:uppercase;color:#fff;background:var(--brand);padding:2px 7px;border-radius:5px">Instructor</span><time>1h ago · line 2</time></div>
+                  <p>Good red! Now tighten the assertion — <code>toThrow()</code> passes on <em>any</em> throw. Assert the type: <code>toThrow(EmptyCartError)</code>, so a future refactor that throws the wrong error still fails. Resubmit when green.</p>
+                </div>
+              </div>
+              <div class="foot"><span class="a"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Reply</span><span class="a"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16"/></svg> Resubmit for review</span></div>
+            </div>
+
+            <!-- collapsed in-portal reviews -->
+            <div class="rev">
+              <div class="key">SHOP-09</div>
+              <div class="info"><h4>Cart total with discounts</h4><div class="sub">Reviewed yesterday · <span class="attempt">attempt 1</span></div></div>
+              <span class="rev-state rs-approved">✓ Approved</span>
+              <a class="ext">Open review <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></a>
+            </div>
+            <div class="rev">
+              <div class="key">SHOP-14</div>
+              <div class="info"><h4>Apply tax to line items</h4><div class="sub">Submitted 1d ago · <span class="attempt">attempt 1</span> · awaiting Valentina</div></div>
+              <span class="rev-state rs-review">◉ In review</span>
+              <a class="ext">Open review <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></a>
+            </div>
+            <div class="rev">
+              <div class="key">SHOP-15</div>
+              <div class="info"><h4>Currency rounding edge cases</h4><div class="sub">Not submitted yet · working in your sandbox</div></div>
+              <span class="rev-state rs-draft">◌ Draft</span>
+              <a class="ext">Submit for review <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            </div>
+
+            <!-- what a NON-member sees instead (instructions above stay visible; review is locked) -->
+            <div style="margin-top:22px;border:1px dashed var(--line);border-radius:12px;padding:16px 18px;background:#fbfbfd">
+              <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:10px">Non-member view (same tab, no Circle)</div>
+              <div style="display:flex;align-items:center;gap:13px">
+                <div style="width:38px;height:38px;border-radius:10px;background:#f1f1f6;display:grid;place-items:center;flex:none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--faint)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+                <div style="flex:1;min-width:0">
+                  <div style="font-size:13.5px;font-weight:600">Code reviews are an Optivem Circle benefit</div>
+                  <div style="font-size:12.5px;color:var(--muted)">You can read the sandbox instructions above — join Circle to connect your repo and get inline reviews.</div>
+                </div>
+                <button class="buy primary" style="width:auto;padding:10px 18px"><svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><path d="M12 2l2.9 6.3 6.8.7-5.1 4.6 1.5 6.7L12 17l-6 3.6 1.5-6.7L2.4 9l6.8-.7z"/></svg> Join Optivem Circle</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ FRAME 4 — LESSON + VIDEO ============ -->
+  <div class="frame-label"><span class="n">04</span><h2>Lesson — embedded video</h2><span>Cloudflare Stream, signed playback (enrolled-only) · replaces Thinkific's player</span></div>
+  <div class="frame">
+    <div class="browserbar">
+      <div class="dots"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div>
+      <div class="url"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="lockclr"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> learn.optivem.com/courses/tdd-fundamentals/04-refactoring</div>
+    </div>
+    <div class="lesson">
+      <div class="lessons-nav">
+        <div class="nl">TDD Fundamentals</div>
+        <div class="lrow"><div class="lk done">✓</div> Introduction <span class="dur">6:12</span></div>
+        <div class="lrow"><div class="lk done">✓</div> Red, Green, Refactor <span class="dur">14:03</span></div>
+        <div class="lrow"><div class="lk done">✓</div> Test doubles &amp; isolation <span class="dur">11:48</span></div>
+        <div class="lrow active"><div class="lk now">▸</div> Refactoring under green <span class="dur">18:20</span></div>
+        <div class="lrow"><div class="lk todo">5</div> Outside-in TDD <span class="dur">22:05</span></div>
+        <div class="lrow"><div class="lk todo">6</div> Capstone: SHOP kata <span class="dur">31:40</span></div>
+      </div>
+      <div class="player-wrap">
+        <div class="player">
+          <div class="stream-tag"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Cloudflare Stream</div>
+          <div class="signed"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Signed · enrolled only</div>
+          <div class="play"><svg width="26" height="26" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></div>
+          <div class="scrub"><span class="t">6:48</span><div class="bar"><i></i></div><span class="t">18:20</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+        </div>
+        <div class="lesson-h"><span class="ch">Module 04</span><h3>Refactoring under a green bar</h3></div>
+        <p class="lesson-sub">Once your test is green, improve the design without changing behaviour — re-running the suite after every small step. We refactor the SHOP checkout into a discount strategy.</p>
+
+        <!-- text-based lesson content, rendered from Markdown with Shiki highlighting (Thinkific can't) -->
+        <div style="border:1px solid var(--line);border-radius:13px;padding:20px 22px;margin-bottom:18px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+            <h4 style="margin:0;font-size:15px;font-weight:700">Lesson notes</h4>
+            <span style="font-size:11px;font-weight:600;color:var(--muted);background:#f3f1fb;border-radius:999px;padding:3px 10px;display:inline-flex;align-items:center;gap:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg> Markdown · Shiki highlighting</span>
+          </div>
+          <p style="font-size:13.5px;color:var(--ink-2);line-height:1.65;margin:0 0 12px">The smell: <code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:#f3f1fb;color:#5a4fcf;padding:1px 6px;border-radius:5px">checkout()</code> branches on a <code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:#f3f1fb;color:#5a4fcf;padding:1px 6px;border-radius:5px">customerType</code> string. Replace the conditional with a <b>discount strategy</b> — behaviour identical, tests stay green:</p>
+          <pre class="code" style="margin:0 0 12px"><span class="c">// before — branching on a type flag (the smell)</span>
+<span class="k">function</span> <span style="color:#82aaff">discountFor</span>(customer, total) {
+  <span class="k">if</span> (customer.type === <span class="s">'vip'</span>)     <span class="k">return</span> total * <span style="color:#f78c6c">0.20</span>;
+  <span class="k">if</span> (customer.type === <span class="s">'staff'</span>)   <span class="k">return</span> total * <span style="color:#f78c6c">0.30</span>;
+  <span class="k">return</span> <span style="color:#f78c6c">0</span>;
+}
+
+<span class="c">// after — a strategy map; open for extension, green throughout</span>
+<span class="k">const</span> STRATEGIES = {
+  vip:   total => total * <span style="color:#f78c6c">0.20</span>,
+  staff: total => total * <span style="color:#f78c6c">0.30</span>,
+};
+<span class="k">const</span> <span style="color:#82aaff">discountFor</span> = (customer, total) =>
+  (STRATEGIES[customer.type] ?? (() => <span style="color:#f78c6c">0</span>))(total);</pre>
+          <p style="font-size:13.5px;color:var(--ink-2);line-height:1.65;margin:0">Run the suite after the extract, then after the inline. Two green bars, one behaviour preserved. <b>Adding a new tier is now a map entry</b>, not a new branch.</p>
+        </div>
+
+        <div class="lesson-ask">
+          <svg class="q" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <input placeholder="Ask a question about this lesson…">
+          <button class="go">Ask</button>
+        </div>
+        <p class="note" style="margin-bottom:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg> The video is a Stream <code style="font-family:'JetBrains Mono';font-size:11px">&lt;stream&gt;</code> embed with a per-student <b>signed token</b> — no enrollment, no playback. A question asked here attaches to <b>this lesson</b>, so it threads into the course Q&amp;A in context.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ FRAME 5 — PRICING / CHECKOUT (B2C + B2B) ============ -->
+  <div class="frame-label"><span class="n">05</span><h2>Checkout — your own payments (B2C + B2B)</h2><span>Stripe + Stripe Tax + Taxually (already in place) · not Thinkific TCommerce</span></div>
+  <div class="frame">
+    <div class="browserbar">
+      <div class="dots"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div>
+      <div class="url"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="lockclr"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> learn.optivem.com/enroll/tdd-fundamentals</div>
+    </div>
+    <div class="content" style="padding:30px 34px 34px">
+      <!-- free community tier (no purchase) -->
+      <div style="display:flex;align-items:center;gap:12px;border:1px solid #cdeddd;background:#f6fcf9;border-radius:12px;padding:12px 16px;margin-bottom:20px">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#1aa06d" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <div style="flex:1"><b style="font-size:13.5px">Community is free</b> <span style="font-size:12.5px;color:var(--muted)">— anyone can join the peer forum without buying a course. The free top of the funnel.</span></div>
+        <span class="pill" style="background:var(--green-soft);color:var(--green);border-color:#cdeddd;font-weight:700">€0 · Join free</span>
+      </div>
+
+      <h3 style="font-size:17px;font-weight:800;letter-spacing:-.01em;margin:0 0 4px">Enrol in TDD Fundamentals</h3>
+      <p style="font-size:12.5px;color:var(--muted);margin:0 0 16px">Buy the <b>course</b> once (this course). <b>Circle</b> &amp; <b>Coaching</b> are <b>account-wide</b> — they apply across <em>all</em> your courses, not just this one.</p>
+      <div class="price-grid" style="grid-template-columns:repeat(3,1fr)">
+
+        <!-- Tier 1: Course — FIXED one-time (the videos) -->
+        <div class="pcard">
+          <div class="ptag">Course · one-time</div>
+          <h4>The course</h4>
+          <p class="blurb">Own the content forever.</p>
+          <div class="amt">€290 <small>once</small></div>
+          <div class="ex">fixed price · yours for life · +VAT</div>
+          <ul>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg> 6 modules · <b>video + notes</b></li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg> Self-paced, lifetime access</li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg> Free community included</li>
+            <li style="color:var(--faint)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--faint)" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg> Q&amp;A / reviews / events → add Circle</li>
+          </ul>
+          <button class="buy ghost">Buy course — €290</button>
+        </div>
+
+        <!-- Tier 2: Circle — SUBSCRIPTION (your time) -->
+        <div class="pcard featured">
+          <div class="ribbon">Most popular</div>
+          <div class="ptag">Circle · subscription</div>
+          <h4>+ Circle</h4>
+          <p class="blurb">Access to my time.</p>
+          <div class="amt">€19 <small>/ mo</small></div>
+          <div class="ex"><b>all-access</b> · every course · cancel anytime</div>
+          <ul>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg> <b>Q&amp;A</b> on courses you own <span style="color:var(--faint)">· fair-use</span></li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg> <b>Code reviews</b> on your repo <span style="color:var(--faint)">· capped</span></li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg> <b>Live group sessions</b> <span style="color:var(--faint)">· all members (stream + Miro)</span></li>
+          </ul>
+          <button class="buy primary"><svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><path d="M12 2l2.9 6.3 6.8.7-5.1 4.6 1.5 6.7L12 17l-6 3.6 1.5-6.7L2.4 9l6.8-.7z"/></svg> Subscribe — €19/mo</button>
+        </div>
+
+        <!-- Tier 3: Team (B2B) — course + Circle for the team -->
+        <div class="pcard">
+          <div class="ptag">Teams · B2B</div>
+          <h4>Team licence</h4>
+          <p class="blurb">Course + Circle for your engineers.</p>
+          <div class="amt">€39 <small>/ seat / mo</small></div>
+          <div class="ex">5+ seats · one invoice</div>
+          <div class="b2b-fields">
+            <div class="f"><b>Seats</b><span>8</span></div>
+            <div class="f full"><b>Org &amp; VAT (reverse-charge)</b><span>Acme GmbH · DE123456789 ✓ €0 VAT</span></div>
+          </div>
+          <button class="buy ghost"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg> Invoice · €312/mo</button>
+          <div class="tax-note" style="margin-top:12px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+            <span><b>Stripe Tax</b> + <b>Taxually</b> handle VAT &amp; reverse-charge. Not TCommerce; no MoR.</span></div>
+        </div>
+
+      </div>
+
+      <p class="note" style="margin:18px 2px 16px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg> <b>The split is by _my time_.</b> The <b>course</b> is a fixed one-time price (you own the videos). <b>Circle</b> is a <b>subscription</b> because Q&amp;A, reviews &amp; live events need my ongoing time. <b>Community</b> is free. Stripe handles both one-time + recurring; <b>Taxually</b> the VAT.</p>
+
+      <!-- Coaching — premium advisory tier (top of the ladder) -->
+      <div style="position:relative;border-radius:16px;overflow:hidden;padding:24px 26px;color:#fff;background:radial-gradient(120% 160% at 88% 8%,#2b2750,#171428 65%)">
+        <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap">
+          <div style="flex:1;min-width:280px">
+            <span style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#c9c2ff">Coaching · advisory</span>
+            <h3 style="font-size:22px;font-weight:800;letter-spacing:-.02em;margin:8px 0 8px">Coaching — advisory on <em>your</em> situation</h3>
+            <p style="font-size:13.5px;color:rgba(255,255,255,.78);line-height:1.6;margin:0 0 14px;max-width:560px">The highest-touch tier. Live Q&amp;A sessions where I advise on <b>your specific</b> codebase/team/decisions — not course content. <b>Unlimited Q&amp;A</b> (courses' Q&amp;A is limited), a dedicated <b>backlog for the live sessions</b>, and the live coaching calls themselves.</p>
+            <div style="display:flex;gap:18px;flex-wrap:wrap;font-size:12.5px;color:rgba(255,255,255,.85)">
+              <span>✓ Unlimited, situational Q&amp;A</span>
+              <span>✓ Live advisory sessions</span>
+              <span>✓ Session backlog (yours)</span>
+            </div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:30px;font-weight:800;letter-spacing:-.02em">€290 <span style="font-size:14px;font-weight:600;color:rgba(255,255,255,.7)">/ mo</span></div>
+            <div style="font-size:11.5px;color:rgba(255,255,255,.6);margin-bottom:14px">limited spots</div>
+            <button class="join" style="background:#fff;color:#2b2750"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.8.7-5.1 4.6 1.5 6.7L12 17l-6 3.6 1.5-6.7L2.4 9l6.8-.7z"/></svg> Apply for coaching</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ FRAME 6 — LIVE EVENTS + QUESTION BACKLOG (Optivem Circle) ============ -->
+  <div class="frame-label"><span class="n">06</span><h2>Optivem Circle — live events &amp; question backlog</h2><span>Surfaced in the portal · live streaming stays on Circle (hardest to build, least core)</span></div>
+  <div class="frame">
+    <div class="browserbar">
+      <div class="dots"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div>
+      <div class="url"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="lockclr"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> learn.optivem.com/live</div>
+    </div>
+    <div class="app">
+      <aside class="side">
+        <div class="brand"><div class="logo">S</div><div><b>Optivem School</b><small>Learning portal</small></div></div>
+        <div class="nav-lab">Menu</div>
+        <div class="nav-item"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg> My Courses</div>
+        <div class="nav-item active"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg> Live events <span class="count">1</span></div>
+        <div class="nav-item"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> My Questions <span class="count">3</span></div>
+        <div class="side-foot">
+          <div class="avatar" style="background:linear-gradient(135deg,#e8742c,#f2a65a)">JC</div>
+          <div class="who">Jakub Cupać<small>jcupac</small></div>
+        </div>
+      </aside>
+      <div class="main">
+        <div class="topbar"><div><h3>Live events</h3><div class="sub">Monthly live Q&amp;A &amp; code-along · powered by Optivem Circle</div></div></div>
+        <div class="content">
+
+          <!-- upcoming event hero -->
+          <div class="ev-hero">
+            <div class="brand-chip"><span class="c"></span> Optivem Circle</div>
+            <span class="live"><i></i> Upcoming live</span>
+            <h3>June Live: Refactoring legacy tests, safely</h3>
+            <div class="when">
+              <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> Thu 26 June · 18:00 CET</span>
+              <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> 60 min · recorded</span>
+              <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg> 23 registered</span>
+            </div>
+            <div class="cta">
+              <button class="join"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Register &amp; add to calendar</button>
+              <button class="join" style="background:rgba(255,255,255,.16);color:#fff;border:1px solid rgba(255,255,255,.3)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18M3 9h6M3 15h6M15 9h6M15 15h6"/></svg> Open Miro board</button>
+              <span class="reg">Stream + collaborative Miro whiteboard</span>
+            </div>
+          </div>
+
+          <!-- question backlog for the event -->
+          <div class="bk-head"><h4>Question backlog <span>· 7 in the queue for the next live event</span></h4><div class="bk-sort"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m18 15-6-6-6 6"/></svg> Most upvoted</div></div>
+          <div class="ask-ev">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+            <input placeholder="Submit a question — it joins the backlog for the next live event…">
+            <button class="go">Submit</button>
+          </div>
+
+          <div class="bk">
+            <div class="upvote on"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m18 15-6-6-6 6h12z"/></svg><b>18</b><small>votes</small></div>
+            <div class="body">
+              <p>How do you add characterization tests to a legacy module with no seams, without rewriting it first?</p>
+              <div class="by"><span>Boris Gerasovski</span> · 2 days ago</div>
+            </div>
+            <span class="stt stt-pending">Queued</span>
+          </div>
+          <div class="bk">
+            <div class="upvote"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m18 15-6-6-6 6"/></svg><b>11</b><small>votes</small></div>
+            <div class="body">
+              <p>When is it worth introducing an approval/snapshot test vs. writing explicit assertions?</p>
+              <div class="by"><span>Andrijana N.</span> · 1 day ago</div>
+            </div>
+            <span class="stt stt-pending">Queued</span>
+          </div>
+          <div class="bk answered">
+            <div class="upvote"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m18 15-6-6-6 6"/></svg><b>9</b><small>votes</small></div>
+            <div class="body">
+              <p>Do you mock the database in legacy tests, or spin up a real one in a container?</p>
+              <div class="by"><span>Jakub Cupać</span> · 3 days ago · <b style="color:var(--brand);font-weight:600">You</b></div>
+            </div>
+            <span class="stt stt-answered">✓ Will cover live</span>
+          </div>
+          <div class="bk">
+            <div class="upvote"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m18 15-6-6-6 6"/></svg><b>4</b><small>votes</small></div>
+            <div class="body">
+              <p>Can you demo the SHOP discount refactor end-to-end during the call?</p>
+              <div class="by"><span>Romain Chambard</span> · 6 hours ago</div>
+            </div>
+            <span class="stt stt-pending">Queued</span>
+          </div>
+
+          <!-- past events / recordings -->
+          <h4 style="font-size:15px;font-weight:700;margin:26px 0 12px">Past events</h4>
+          <div class="past-evs">
+            <div class="pev"><div class="thumb"><div class="pl"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></div><span class="len">58:14</span></div><div class="cap"><h5>May Live: Outside-in TDD</h5><div class="d">29 May · recording</div></div></div>
+            <div class="pev"><div class="thumb"><div class="pl"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></div><span class="len">1:02:40</span></div><div class="cap"><h5>April Live: Test doubles deep-dive</h5><div class="d">24 Apr · recording</div></div></div>
+            <div class="pev"><div class="thumb"><div class="pl"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></div><span class="len">47:31</span></div><div class="cap"><h5>March Live: Q&amp;A AMA</h5><div class="d">27 Mar · recording</div></div></div>
+          </div>
+
+          <p class="note" style="margin-bottom:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg> The backlog is <b>rolling</b> — questions aren't tied to a specific event; they accumulate and you triage the top-voted into <b>whichever event is next</b>. The <b>backlog</b> (submit + upvote + triage) can live in your D1; the <b>live stream</b> stays on <b>Circle</b> and a <b>Miro</b> board is embedded for collaboration (both hardest to build, least core). Surfaced here so it feels like one product.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ FRAME 7 — ACCOUNT / BILLING (invoices + editable B2B details) ============ -->
+  <div class="frame-label"><span class="n">07</span><h2>Account — invoices &amp; editable B2B details</h2><span>Stripe is the source of truth · view/download invoices, edit company + VAT ID</span></div>
+  <div class="frame">
+    <div class="browserbar">
+      <div class="dots"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div>
+      <div class="url"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="lockclr"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> learn.optivem.com/account/billing</div>
+    </div>
+    <div class="app">
+      <aside class="side">
+        <div class="brand"><div class="logo">S</div><div><b>Optivem School</b><small>Learning portal</small></div></div>
+        <div class="nav-lab">Menu</div>
+        <div class="nav-item"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg> My Courses</div>
+        <div class="nav-item"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg> Live events</div>
+        <div class="nav-item active"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg> Account &amp; billing</div>
+        <div class="side-foot">
+          <div class="avatar" style="background:linear-gradient(135deg,#3a6ea8,#5a93d0)">AG</div>
+          <div class="who">Acme GmbH<small>billing admin</small></div>
+        </div>
+      </aside>
+      <div class="main">
+        <div class="topbar"><div><h3>Account &amp; billing</h3><div class="sub">Team licence · 8 seats · Acme GmbH</div></div></div>
+        <div class="content">
+
+          <!-- editable B2B details -->
+          <div class="acard">
+            <div class="ah2"><h4>Billing details</h4><span class="edit-link"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4z"/></svg> Editing</span></div>
+            <p class="desc">These appear on every invoice. Changes apply to <b>future</b> invoices — past invoices stay as issued.</p>
+            <div class="frow"><label>Company name</label><div class="finput focus">Acme GmbH</div></div>
+            <div class="frow"><label>VAT ID</label><div class="finput focus">DE123456789 <span class="vat-ok"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg> Valid · reverse-charge</span></div></div>
+            <div class="frow"><label>Billing email</label><div class="finput">accounts@acme.example</div></div>
+            <div class="frow"><label>Billing address</label><div class="finput">Friedrichstraße 12, 10117 Berlin, DE</div></div>
+            <div class="save-row">
+              <button class="btn-save">Save details</button>
+              <button class="btn-cancel">Cancel</button>
+              <span class="hint"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg> VAT ID is validated live (VIES) via Stripe; a valid EU ID applies reverse-charge (€0 VAT).</span>
+            </div>
+          </div>
+
+          <!-- invoices -->
+          <div class="acard">
+            <div class="ah2"><h4>Invoices</h4><span class="edit-link" style="color:var(--muted);cursor:default"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg> Issued &amp; stored by Stripe</span></div>
+            <p class="desc">Every payment generates a tax-compliant invoice (VAT line per Stripe Tax). Download anytime.</p>
+            <table class="inv-table">
+              <thead><tr><th>Invoice</th><th>Date</th><th>Description</th><th>Amount</th><th>Status</th><th></th></tr></thead>
+              <tbody>
+                <tr><td>INV-2026-0148</td><td>2 Jun 2026</td><td>TDD Fundamentals — 3 add'l seats</td><td class="inv-amt">€990.00</td><td><span class="inv-paid">Paid</span></td><td><span class="inv-dl"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg> PDF</span></td></tr>
+                <tr><td>INV-2026-0093</td><td>14 Apr 2026</td><td>Team licence — 5 seats</td><td class="inv-amt">€1,650.00</td><td><span class="inv-paid">Paid</span></td><td><span class="inv-dl"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg> PDF</span></td></tr>
+                <tr><td>INV-2026-0151</td><td>11 Jun 2026</td><td>Pipeline &amp; CI/CD — 2 seats</td><td class="inv-amt">€660.00</td><td><span class="inv-open">Due 25 Jun</span></td><td><span class="inv-dl"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg> PDF</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p class="note" style="margin-bottom:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg> <b>Stripe is the source of truth</b> — invoices aren't stored in D1 (just the <code style="font-family:'JetBrains Mono';font-size:11px">stripe_customer_id</code>). This page reads invoices from Stripe and writes B2B detail edits back to the Stripe Customer (<code style="font-family:'JetBrains Mono';font-size:11px">tax_ids</code>, name, address). Shipping fast? Stripe's hosted Customer Portal gives this for free; the native page above is the no-click-out end-state.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ FRAME 8 — COMMUNITY FORUM (peer-to-peer, everyone default-joins) ============ -->
+  <div class="frame-label"><span class="n">08</span><h2>Community — freestyle peer discussion</h2><span>Everyone auto-joins · peers answer · your reply optional (≠ course Q&amp;A)</span></div>
+  <div class="frame">
+    <div class="browserbar">
+      <div class="dots"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div>
+      <div class="url"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="lockclr"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> learn.optivem.com/community</div>
+    </div>
+    <div class="app">
+      <aside class="side">
+        <div class="brand"><div class="logo">S</div><div><b>Optivem School</b><small>Learning portal</small></div></div>
+        <div class="nav-lab">Menu</div>
+        <div class="nav-item"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg> My Courses</div>
+        <div class="nav-item active"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg> Community</div>
+        <div class="nav-item"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg> Live events</div>
+        <div class="side-foot">
+          <div class="avatar" style="background:linear-gradient(135deg,#e8742c,#f2a65a)">JC</div>
+          <div class="who">Jakub Cupać<small>jcupac</small></div>
+        </div>
+      </aside>
+      <div class="main">
+        <div class="topbar"><div><h3>Community</h3><div class="sub">Everyone's here · be kind · peers help peers</div></div>
+          <div class="search"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg> Search…</div>
+        </div>
+        <div class="content">
+
+          <!-- category chips -->
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px">
+            <span class="pill" style="background:var(--brand);color:#fff;border-color:var(--brand)">All</span>
+            <span class="pill">General</span>
+            <span class="pill">Show your work</span>
+            <span class="pill">Wins 🎉</span>
+            <span class="pill">Jobs</span>
+            <span class="pill">Off-topic</span>
+          </div>
+
+          <!-- new post -->
+          <div class="ask" style="margin-bottom:18px">
+            <div class="avatar av" style="background:linear-gradient(135deg,#e8742c,#f2a65a)">JC</div>
+            <input placeholder="Start a discussion… (Markdown supported)">
+            <button class="go">Post</button>
+          </div>
+
+          <!-- posts: peer-driven, no instructor answer expected -->
+          <div class="q" style="margin-bottom:12px">
+            <div class="q-head">
+              <div class="avatar av" style="background:linear-gradient(135deg,#7a5bd0,#a589e8)">ST</div>
+              <div class="q-meta">
+                <p class="qtitle">Landed a senior role — partly thanks to the Pipeline course 🎉</p>
+                <div class="byline">Sowmiya Thoguluva · <b style="color:var(--brand)">Wins</b> · 2 days ago</div>
+              </div>
+            </div>
+            <div class="q-foot" style="padding-left:48px">
+              <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.3a2 2 0 0 0 2-1.7l1.4-9a2 2 0 0 0-2-2.3z"/></svg> 31 likes</span>
+              <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> 9 replies</span>
+              <span style="display:flex;align-items:center;gap:-6px;margin-left:auto">
+                <span class="avatar" style="width:22px;height:22px;font-size:9px;background:#3a6ea8;border:2px solid #fff">RC</span>
+                <span class="avatar" style="width:22px;height:22px;font-size:9px;background:#2f8f6f;border:2px solid #fff;margin-left:-7px">BG</span>
+                <span class="avatar" style="width:22px;height:22px;font-size:9px;background:#c98a16;border:2px solid #fff;margin-left:-7px">+7</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="q" style="margin-bottom:12px">
+            <div class="q-head">
+              <div class="avatar av" style="background:linear-gradient(135deg,#2f8f6f,#54b894)">RC</div>
+              <div class="q-meta">
+                <p class="qtitle">Hot take: mocking the DB in integration tests is a smell — change my mind</p>
+                <div class="byline">Romain Chambard · <b style="color:var(--muted)">General</b> · 3 days ago</div>
+              </div>
+            </div>
+            <div class="q-body" style="padding-left:48px">Containers are cheap now. I'd rather spin a real Postgres in CI than maintain a fake that drifts from reality. Counterarguments?</div>
+            <div class="q-foot" style="padding-left:48px">
+              <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.3a2 2 0 0 0 2-1.7l1.4-9a2 2 0 0 0-2-2.3z"/></svg> 14 likes</span>
+              <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> 18 replies</span>
+              <span style="margin-left:auto;font-size:11.5px;color:var(--faint)">last reply 20m ago</span>
+            </div>
+          </div>
+
+          <div class="q" style="margin-bottom:0">
+            <div class="q-head">
+              <div class="avatar av" style="background:linear-gradient(135deg,#b0568a,#d77fb0)">AN</div>
+              <div class="q-meta">
+                <p class="qtitle">Anyone in Berlin up for coffee + pairing this weekend?</p>
+                <div class="byline">Andrijana N. · <b style="color:var(--muted)">General</b> · 1 day ago</div>
+              </div>
+            </div>
+            <div class="q-foot" style="padding-left:48px">
+              <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.3a2 2 0 0 0 2-1.7l1.4-9a2 2 0 0 0-2-2.3z"/></svg> 7 likes</span>
+              <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> 6 replies</span>
+            </div>
+          </div>
+
+          <p class="note" style="margin-bottom:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg> <b>Free &amp; open</b> — anyone joins without buying a course (replaces the current chat tool). <b>Peer-to-peer</b>: your reply isn't expected (vs <b>course Q&amp;A</b>, frame 03, where students expect <em>your</em> answer). Includes <b>DMs</b> — student↔student free; DMing <em>you</em> is gated (a high-rung Circle/coaching perk, or your inbox is unbounded). Markdown, in D1.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ FRAME 9 — INSTRUCTOR DASHBOARD (work queue) ============ -->
+  <div class="frame-label"><span class="n">09</span><h2>Instructor — your work queue</h2><span>Questions awaiting answer · reviews awaiting feedback · event backlog · the teacher side</span></div>
+  <div class="frame">
+    <div class="browserbar">
+      <div class="dots"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div>
+      <div class="url"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="lockclr"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> learn.optivem.com/instructor</div>
+    </div>
+    <div class="app">
+      <aside class="side">
+        <div class="brand"><div class="logo">S</div><div><b>Optivem School</b><small>Instructor</small></div></div>
+        <div class="nav-lab">Teach</div>
+        <div class="nav-item active"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg> Work queue <span class="count">8</span></div>
+        <div class="nav-item"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> Courses</div>
+        <div class="nav-item"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg> Students</div>
+        <div class="side-foot">
+          <div class="avatar" style="background:linear-gradient(135deg,var(--brand),var(--brand-2))">VJ</div>
+          <div class="who">Valentina Jemuović<small>Instructor</small></div>
+        </div>
+      </aside>
+      <div class="main">
+        <div class="topbar"><div><h3>Work queue</h3><div class="sub">What needs you — oldest first</div></div></div>
+        <div class="content">
+
+          <!-- stat row -->
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px">
+            <div class="acard" style="margin:0;padding:16px 18px"><div style="font-size:12px;color:var(--muted);font-weight:600;margin-bottom:6px">Questions awaiting</div><div style="font-size:28px;font-weight:800;letter-spacing:-.02em">5</div><div style="font-size:11.5px;color:var(--amber);font-weight:600;margin-top:2px">oldest 1d ago</div></div>
+            <div class="acard" style="margin:0;padding:16px 18px"><div style="font-size:12px;color:var(--muted);font-weight:600;margin-bottom:6px">Reviews awaiting</div><div style="font-size:28px;font-weight:800;letter-spacing:-.02em">3</div><div style="font-size:11.5px;color:var(--rose);font-weight:600;margin-top:2px">1 overdue (&gt;48h)</div></div>
+            <div class="acard" style="margin:0;padding:16px 18px"><div style="font-size:12px;color:var(--muted);font-weight:600;margin-bottom:6px">Event backlog</div><div style="font-size:28px;font-weight:800;letter-spacing:-.02em">7</div><div style="font-size:11.5px;color:var(--muted);font-weight:600;margin-top:2px">for June Live</div></div>
+            <div class="acard" style="margin:0;padding:16px 18px"><div style="font-size:12px;color:var(--muted);font-weight:600;margin-bottom:6px">Median response</div><div style="font-size:28px;font-weight:800;letter-spacing:-.02em">14h</div><div style="font-size:11.5px;color:var(--green);font-weight:600;margin-top:2px">▼ within target</div></div>
+          </div>
+
+          <h4 style="font-size:14px;font-weight:700;margin:0 0 12px">Needs your reply</h4>
+
+          <!-- review awaiting (overdue) -->
+          <div class="rev">
+            <div class="key" style="background:#fde7ee;color:var(--rose)">REVIEW</div>
+            <div class="info"><h4>Pipeline kata — stage caching <span style="font-size:11px;font-weight:700;color:var(--rose);background:var(--rose-soft);padding:1px 8px;border-radius:5px;margin-left:4px">Overdue</span></h4><div class="sub">Boris Gerasovski · Pipeline &amp; CI/CD · submitted 2d ago · attempt 1</div></div>
+            <a class="ext" style="background:var(--brand);color:#fff;padding:8px 16px;border-radius:9px">Review now <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></a>
+          </div>
+          <!-- question awaiting -->
+          <div class="rev">
+            <div class="key" style="background:var(--brand-soft);color:var(--brand)">Q&amp;A</div>
+            <div class="info"><h4>Red step passes immediately — what am I missing?</h4><div class="sub">Jakub Cupać · TDD Fundamentals · Module 04 · 5h ago</div></div>
+            <a class="ext" style="background:var(--brand);color:#fff;padding:8px 16px;border-radius:9px">Answer <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></a>
+          </div>
+          <!-- review awaiting -->
+          <div class="rev">
+            <div class="key" style="background:#fde7ee;color:var(--rose)">REVIEW</div>
+            <div class="info"><h4>Checkout: apply tax to line items</h4><div class="sub">Jakub Cupać · TDD Fundamentals · submitted 1d ago · attempt 1</div></div>
+            <a class="ext">Open review <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></a>
+          </div>
+          <!-- question awaiting -->
+          <div class="rev">
+            <div class="key" style="background:var(--brand-soft);color:var(--brand)">Q&amp;A</div>
+            <div class="info"><h4>Do I assert on collaborators or only on the result?</h4><div class="sub">Anil V. · TDD Fundamentals · Module 03 · 1d ago</div></div>
+            <a class="ext">Answer <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></a>
+          </div>
+          <!-- event backlog triage -->
+          <div class="rev">
+            <div class="key" style="background:#ffe9d6;color:#c2701a">EVENT</div>
+            <div class="info"><h4>Triage the June Live backlog</h4><div class="sub">7 questions submitted · 3 high-upvote · mark which you'll cover live</div></div>
+            <a class="ext">Triage <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></a>
+          </div>
+
+          <p class="note" style="margin-bottom:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg> One queue across <b>all courses</b> — every unanswered question, un-reviewed submission, and untriaged event question, oldest first. It's just D1 queries (<code style="font-family:'JetBrains Mono';font-size:11px">status='pending'</code>) filtered to instructors. Replaces poking around board #18. <b>Community</b> isn't here on purpose — peers own it, your reply isn't expected.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ FRAME 10 — ADMIN (teachers, courses, comp students, orgs) ============ -->
+  <div class="frame-label"><span class="n">10</span><h2>Admin — configure teachers, courses, access</h2><span>Owner-only · add teachers, comp ad-hoc students, B2B orgs</span></div>
+  <div class="frame">
+    <div class="browserbar">
+      <div class="dots"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div>
+      <div class="url"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="lockclr"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> learn.optivem.com/admin</div>
+    </div>
+    <div class="app">
+      <aside class="side">
+        <div class="brand"><div class="logo">S</div><div><b>Optivem School</b><small>Admin</small></div></div>
+        <div class="nav-lab">Configure</div>
+        <div class="nav-item active"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg> Teachers</div>
+        <div class="nav-item"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> Courses</div>
+        <div class="nav-item"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg> Students &amp; orgs</div>
+        <div class="side-foot">
+          <div class="avatar" style="background:linear-gradient(135deg,var(--brand),var(--brand-2))">VJ</div>
+          <div class="who">Valentina Jemuović<small>Owner / Admin</small></div>
+        </div>
+      </aside>
+      <div class="main">
+        <div class="topbar"><div><h3>Admin</h3><div class="sub">Teachers · courses · access</div></div></div>
+        <div class="content">
+
+          <!-- teachers -->
+          <div class="acard">
+            <div class="ah2"><h4>Teachers</h4><span class="edit-link"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> Add teacher</span></div>
+            <p class="desc">Teachers answer questions and review submissions for the courses you assign them.</p>
+            <table class="inv-table">
+              <thead><tr><th>Name</th><th>Role</th><th>Assigned courses</th><th></th></tr></thead>
+              <tbody>
+                <tr><td style="font-family:inherit;font-size:13px;color:var(--ink);font-weight:600">Valentina Jemuović</td><td><span class="inv-paid" style="background:var(--brand-soft);color:var(--brand)">Admin</span></td><td>All courses</td><td><span class="inv-dl">Manage</span></td></tr>
+                <tr><td style="font-family:inherit;font-size:13px;color:var(--ink);font-weight:600">Marko Petrov</td><td><span class="inv-paid" style="background:var(--blue-soft);color:var(--blue)">Teacher</span></td><td>Pipeline &amp; CI/CD</td><td><span class="inv-dl">Manage</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- courses -->
+          <div class="acard">
+            <div class="ah2"><h4>Courses</h4><span class="edit-link"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> New course</span></div>
+            <p class="desc">Create a course, then open the <b>course designer</b> to build modules &amp; lessons (frame 11).</p>
+            <table class="inv-table">
+              <thead><tr><th>Course</th><th>Price</th><th>Modules</th><th>Status</th><th></th></tr></thead>
+              <tbody>
+                <tr><td style="font-family:inherit;font-size:13px;color:var(--ink);font-weight:600">TDD Fundamentals</td><td class="inv-amt">€390</td><td>6</td><td><span class="inv-paid">Published</span></td><td><span class="inv-dl">Design →</span></td></tr>
+                <tr><td style="font-family:inherit;font-size:13px;color:var(--ink);font-weight:600">Pipeline &amp; CI/CD</td><td class="inv-amt">€330</td><td>5</td><td><span class="inv-paid">Published</span></td><td><span class="inv-dl">Design →</span></td></tr>
+                <tr><td style="font-family:inherit;font-size:13px;color:var(--ink);font-weight:600">Hexagonal Architecture</td><td class="inv-amt">€390</td><td>2</td><td><span class="inv-open" style="background:#eee;color:var(--muted)">Draft</span></td><td><span class="inv-dl">Design →</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- comp students + orgs -->
+          <div class="acard">
+            <div class="ah2"><h4>Students &amp; access</h4></div>
+            <p class="desc">Grant access without payment (comp), or group seats under a B2B organisation.</p>
+            <div style="display:flex;gap:11px;align-items:center;background:#faf9ff;border:1px dashed #d6d0f5;border-radius:11px;padding:12px 15px;margin-bottom:16px">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg>
+              <div class="finput" style="flex:1;background:#fff">student@email.com</div>
+              <div class="finput" style="background:#fff">TDD Fundamentals ▾</div>
+              <span class="pill" style="background:var(--green-soft);color:var(--green);border-color:#cdeddd">Comp (no charge)</span>
+              <button class="go" style="white-space:nowrap">Add ad-hoc student</button>
+            </div>
+            <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin:6px 0 8px">Organisations (B2B groups)</div>
+            <table class="inv-table">
+              <thead><tr><th>Organisation</th><th>VAT ID</th><th>Seats</th><th></th></tr></thead>
+              <tbody>
+                <tr><td style="font-family:inherit;font-size:13px;color:var(--ink);font-weight:600">Acme GmbH</td><td style="font-family:'JetBrains Mono',monospace;font-size:12px">DE123456789</td><td>8 (6 assigned)</td><td><span class="inv-dl">Manage seats</span></td></tr>
+                <tr><td style="font-family:inherit;font-size:13px;color:var(--ink);font-weight:600">Northwind Ltd</td><td style="font-family:'JetBrains Mono',monospace;font-size:12px">GB987654321</td><td>4 (4 assigned)</td><td><span class="inv-dl">Manage seats</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p class="note" style="margin-bottom:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg> Roles live on <code style="font-family:'JetBrains Mono';font-size:11px">users.role</code> (student / teacher / admin). <b>Comp</b> enrolments are admin-granted (no Stripe charge); <b>group</b> signups capture an <b>org name</b> + VAT ID and assign seats. Admin-only — gated by role.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ FRAME 11 — COURSE DESIGNER (modules → lessons, video + text) ============ -->
+  <div class="frame-label"><span class="n">11</span><h2>Course designer — modules, lessons, video + text</h2><span>Build the course structure · each lesson = Stream video + Markdown text</span></div>
+  <div class="frame">
+    <div class="browserbar">
+      <div class="dots"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div>
+      <div class="url"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="lockclr"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> learn.optivem.com/admin/courses/tdd-fundamentals/design</div>
+    </div>
+    <div class="lesson">
+      <!-- module/lesson tree -->
+      <div class="lessons-nav" style="width:270px">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:4px 8px 10px"><span class="nl" style="padding:0">TDD Fundamentals</span><span class="edit-link" style="font-size:11px">+ Module</span></div>
+        <div style="font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);padding:8px 10px 4px">Module 04 · Refactoring</div>
+        <div class="lrow"><div class="lk done" style="background:#eceaf6;color:var(--faint)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 5v14l11-7z"/></svg></div> Intro to refactoring <span class="dur">6:40</span></div>
+        <div class="lrow active"><div class="lk now"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></div> Refactoring under green <span class="dur">18:20</span></div>
+        <div class="lrow"><div class="lk todo">+</div> <span style="color:var(--faint)">Add lesson…</span></div>
+        <div style="font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);padding:14px 10px 4px">Module 05 · Outside-in</div>
+        <div class="lrow"><div class="lk done" style="background:#eceaf6;color:var(--faint)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 5v14l11-7z"/></svg></div> What is outside-in <span class="dur">9:10</span></div>
+        <div class="lrow"><div class="lk todo">+</div> <span style="color:var(--faint)">Add lesson…</span></div>
+      </div>
+      <!-- lesson editor -->
+      <div class="player-wrap">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+          <div><div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--faint)">Editing lesson · Module 04</div><h3 style="font-size:18px;font-weight:700;margin:3px 0 0;letter-spacing:-.01em">Refactoring under green</h3></div>
+          <div style="display:flex;gap:9px"><button class="btn-cancel">Preview</button><button class="btn-save">Save lesson</button></div>
+        </div>
+
+        <!-- video slot -->
+        <div style="font-size:12px;font-weight:700;color:var(--ink-2);margin-bottom:8px">VIDEO</div>
+        <div style="display:flex;gap:14px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:20px">
+          <div style="width:120px;aspect-ratio:16/9;border-radius:8px;background:radial-gradient(120% 120% at 30% 20%,#2a2740,#16151f);display:grid;place-items:center;flex:none"><svg width="22" height="22" viewBox="0 0 24 24" fill="rgba(255,255,255,.8)"><path d="M8 5v14l11-7z"/></svg></div>
+          <div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:600">refactoring-under-green.mp4</div><div style="font-size:12px;color:var(--muted)">Cloudflare Stream · 18:20 · ready · signed playback</div></div>
+          <button class="btn-cancel">Replace</button>
+        </div>
+
+        <!-- text content (Markdown editor) -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--ink-2)">TEXT CONTENT</div>
+          <div class="seg" style="margin:0"><button class="on" style="padding:5px 13px;font-size:12px">Write</button><button style="padding:5px 13px;font-size:12px">Preview</button></div>
+        </div>
+        <div style="border:1px solid var(--line);border-radius:11px;overflow:hidden">
+          <div style="display:flex;gap:4px;padding:8px 10px;border-bottom:1px solid var(--line-2);background:#fbfafe;color:var(--muted)">
+            <span style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13px;padding:2px 7px">B</span>
+            <span style="font-style:italic;font-size:13px;padding:2px 7px">i</span>
+            <span style="font-size:13px;padding:2px 7px">&lt;/&gt;</span>
+            <span style="font-size:13px;padding:2px 7px">“”</span>
+            <span style="font-size:13px;padding:2px 7px">• list</span>
+            <span style="margin-left:auto;font-size:11px;color:var(--faint);align-self:center">Markdown · Shiki on save</span>
+          </div>
+          <pre style="font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.6;color:var(--ink-2);margin:0;padding:14px 16px;white-space:pre-wrap">## The smell
+
+`checkout()` branches on a `customerType` string. Replace the
+conditional with a **discount strategy** — behaviour identical:
+
+```js
+const STRATEGIES = {
+  vip:   total => total * 0.20,
+  staff: total => total * 0.30,
+};
+```
+
+Run the suite after each step. Adding a tier is now a map entry.</pre>
+        </div>
+        <p class="note" style="margin-bottom:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg> Course → <b>modules</b> → <b>lessons</b>; each lesson has a <b>Stream video</b> + <b>Markdown text</b> (rendered with Shiki — see frame 04). This is the authoring side that <b>replaces Thinkific's course builder</b>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ FRAME 12 — PUBLIC COURSE LANDING PAGE (marketing, no gate) ============ -->
+  <div class="frame-label"><span class="n">12</span><h2>Course landing page — public (the funnel)</h2><span>No gate · SEO/marketing · the page strangers land on before they buy</span></div>
+  <div class="frame">
+    <div class="browserbar">
+      <div class="dots"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div>
+      <div class="url"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg> optivem.com/courses/tdd-fundamentals <span style="color:var(--green);font-weight:600;margin-left:6px">· public</span></div>
+    </div>
+    <div style="background:#fff">
+      <!-- public top nav -->
+      <div style="display:flex;align-items:center;gap:22px;padding:16px 34px;border-bottom:1px solid var(--line-2)">
+        <div class="brand" style="padding:0"><div class="logo">S</div><b>Optivem School</b></div>
+        <span style="font-size:13px;color:var(--ink-2);font-weight:500;margin-left:14px">Courses</span>
+        <span style="font-size:13px;color:var(--ink-2);font-weight:500">Community</span>
+        <span style="font-size:13px;color:var(--ink-2);font-weight:500">Live events</span>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:16px">
+          <span style="font-size:13px;color:var(--ink-2);font-weight:600">Log in</span>
+          <button class="buy primary" style="width:auto;padding:9px 18px">Enrol</button>
+        </div>
+      </div>
+
+      <!-- hero -->
+      <div style="padding:48px 34px 40px;background:radial-gradient(900px 420px at 80% -10%,#ece9fe,transparent 60%),radial-gradient(700px 360px at -5% 10%,#e6f0ff,transparent 55%)">
+        <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:40px;align-items:center">
+          <div>
+            <span class="pill" style="background:var(--brand-soft);color:var(--brand);border-color:#ddd6f7;font-weight:700">Flagship course</span>
+            <h1 style="font-size:38px;font-weight:800;letter-spacing:-.03em;line-height:1.1;margin:16px 0 12px">Test-Driven Development, done properly.</h1>
+            <p style="font-size:16px;color:var(--ink-2);line-height:1.6;margin:0 0 24px;max-width:520px">Learn TDD the way real teams practise it — red/green/refactor, test doubles, outside-in design — with <b>code reviews on your own work</b> and direct answers from the instructor.</p>
+            <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px">
+              <button class="buy primary" style="width:auto;padding:13px 26px;font-size:15px">Enrol — €390</button>
+              <button class="buy ghost" style="width:auto;padding:13px 22px;font-size:15px"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Watch intro</button>
+            </div>
+            <div style="display:flex;align-items:center;gap:18px;font-size:13px;color:var(--muted)">
+              <span>★★★★★ <b style="color:var(--ink-2)">4.9</b> · 120+ engineers</span>
+              <span>·</span><span>6 modules · ~1h40 video</span>
+            </div>
+          </div>
+          <div class="player" style="box-shadow:0 24px 50px -24px rgba(40,25,90,.5)">
+            <div class="stream-tag"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Free preview</div>
+            <div class="play"><svg width="26" height="26" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- what you'll learn -->
+      <div style="padding:36px 34px">
+        <h3 style="font-size:20px;font-weight:800;letter-spacing:-.01em;margin:0 0 18px">What you'll learn</h3>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+          <div class="acard" style="margin:0"><div style="font-size:22px;margin-bottom:6px">🔴</div><h4 style="margin:0 0 4px;font-size:14px">Red / green / refactor</h4><p class="desc" style="margin:0">Drive design from failing tests, one behaviour at a time.</p></div>
+          <div class="acard" style="margin:0"><div style="font-size:22px;margin-bottom:6px">🧩</div><h4 style="margin:0 0 4px;font-size:14px">Test doubles &amp; isolation</h4><p class="desc" style="margin:0">Mocks, stubs, fakes — and when each is the wrong call.</p></div>
+          <div class="acard" style="margin:0"><div style="font-size:22px;margin-bottom:6px">🎯</div><h4 style="margin:0 0 4px;font-size:14px">Outside-in TDD</h4><p class="desc" style="margin:0">Build from the acceptance test inward on a real kata.</p></div>
+        </div>
+      </div>
+
+      <!-- curriculum + sticky-ish pricing -->
+      <div style="padding:8px 34px 40px;display:grid;grid-template-columns:1.4fr 1fr;gap:30px;align-items:start">
+        <div>
+          <h3 style="font-size:20px;font-weight:800;letter-spacing:-.01em;margin:0 0 14px">Curriculum</h3>
+          <div class="modlist">
+            <div class="mod"><span class="mnum">01</span><h4>Introduction</h4><span class="mstate">6:12 · free</span></div>
+            <div class="mod"><span class="mnum">02</span><h4>Red, Green, Refactor</h4><span class="mstate">14:03</span></div>
+            <div class="mod"><span class="mnum">03</span><h4>Test doubles &amp; isolation</h4><span class="mstate">11:48</span></div>
+            <div class="mod"><span class="mnum">04</span><h4>Refactoring under green</h4><span class="mstate">18:20</span></div>
+            <div class="mod"><span class="mnum">05</span><h4>Outside-in TDD</h4><span class="mstate">22:05</span></div>
+            <div class="mod"><span class="mnum">06</span><h4>Capstone: the SHOP kata</h4><span class="mstate">31:40</span></div>
+          </div>
+        </div>
+        <div class="pcard featured" style="margin-top:38px">
+          <div class="ptag">Enrol today</div>
+          <div class="amt" style="margin:8px 0 2px">€390 <small>once · lifetime</small></div>
+          <div class="ex">VAT shown at checkout</div>
+          <ul>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg> All 6 modules + lesson notes</li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg> Shared Q&amp;A with the instructor</li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg> Community access</li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg> <b>+ Circle:</b> reviews &amp; live events</li>
+          </ul>
+          <button class="buy primary">Enrol — €390</button>
+          <button class="buy ghost" style="margin-top:9px">For teams (B2B) →</button>
+        </div>
+      </div>
+
+      <p class="note" style="margin:0 34px 28px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg> <b>Public, no gate</b> — this is the funnel (SEO + marketing) that feeds <b>Checkout</b> (frame 05). It confirms the earlier point: a public commerce product wants <b>app-level auth</b>, not the Access gate (which suits the private dashboard interim). Landing copy is Markdown; the preview video is a public Stream embed.</p>
+    </div>
+  </div>
+
+  <p class="note" style="margin-top:34px; font-size:13px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></svg> <span><b>12 frames · 3 roles + public.</b> <b>Public:</b> course landing → Checkout. <b>Student:</b> Login · Courses · Course detail (Progress / shared <b>Q&amp;A</b> / <b>in-portal reviews</b>) · Lesson (<b>video + text</b>) · <b>Account/billing</b> · <b>Community</b> · <b>Circle</b> live events (stream + <b>Miro</b>). <b>Teacher:</b> Work queue. <b>Admin:</b> teachers/courses/access + <b>course designer</b>. Tiers: <b>enrolled</b> vs <b>Circle member</b>. <b>Markdown + Shiki</b> everywhere; own-repo reviews; <b>Stripe + Taxually</b>.</span></p>
+
+</div>
+<script>
+  function pick(el){
+    const tabs = el.parentElement.querySelectorAll('.tab');
+    tabs.forEach(t=>t.classList.remove('active'));
+    el.classList.add('active');
+    const wrap = el.closest('.main');
+    wrap.querySelectorAll('.pane').forEach(p=>p.classList.remove('show'));
+    wrap.querySelector('.pane[data-pane="'+el.dataset.tab+'"]').classList.add('show');
+  }
+</script>
+</body>
+</html>

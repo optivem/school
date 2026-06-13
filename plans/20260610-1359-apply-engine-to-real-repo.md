@@ -18,9 +18,16 @@
   (Free plan), so the dashboard **must** be on **Cloudflare Pages + Access** by then — exactly the setup
   validated on `school-test`. So this migration is naturally bounded by that date.
 
-## ▶ RESUME HERE (as of 2026-06-12) — next: Cloudflare Access
+## ▶ RESUME HERE (as of 2026-06-12) — Access built but set PUBLIC; re-gate before 2026-07-02
 
 **This section is self-contained so a fresh session can continue without prior chat history.**
+
+> 🔴 **HARD CHECKPOINT — re-gate before 2026-07-02 (hub goes private).** Access is fully built but
+> **intentionally set to PUBLIC tonight** via a `Bypass / Everyone` policy named `Public (temporary)` on
+> the `optivem-learn.pages.dev` app (reverting to how the dashboard has been all along — it was never
+> private before tonight). The page serves with **no login**. **To re-gate: delete the `Public (temporary)`
+> Bypass policy** — the GitHub IdP + `Students and admins` Allow policy are still in place underneath. A
+> public dashboard once hub is private would expose student data, so this MUST happen before the flip.
 
 ### Done so far
 - Engine on hub `main` (hardened + full superset of hub); end-to-end verified via the **`SHOP`** sandbox
@@ -33,31 +40,52 @@
 - **`learn.optivem.com` LIVE** (CF custom domain + Bluehost CNAME `learn` → `optivem-learn.pages.dev`).
 - **`optivem.github.io/hub`** serves a static redirect → `https://learn.optivem.com/` (Pages on branch
   `main`/`docs`; `hub/docs/index.html`).
-- **`optivem-students`** GitHub team created (id 18008854, **no repo access**, currently **empty**).
+- **`optivem-students`** GitHub team (id 18008854, **`repos_count: 0` — no repo access**, default perm
+  `pull` but 0 repos so moot — *never add a repo to it*). Currently **1 member: `valentinajemuovic`**.
+- ✅ **CLOUDFLARE ACCESS LIVE (2026-06-12)** — dashboard is **gated**; `learn.optivem.com` +
+  `optivem-learn.pages.dev` no longer public. Setup that worked:
+  - **GitHub OAuth App** (in `optivem` org) — callback `https://optivem.cloudflareaccess.com/cdn-cgi/access/callback`.
+  - **Zero Trust team domain = `optivem.cloudflareaccess.com`** (team was renamed from auto-name
+    `raspy-tree-0afe` → `optivem`; rename took effect).
+  - **GitHub IdP** added under **Integrations → Identity providers** (new UI; *not* Settings→Auth).
+  - **Access app `optivem-learn.pages.dev`** (Access controls → Applications) covers **both** hostnames.
+  - **Policy `Students and admins`**, Allow, **Include = GitHub → Organizations → `optivem`** (reliable
+    admin unblock — see gotcha #3). Verified: admin logs in via GitHub and reaches the dashboard.
+  - ⚠️ **Currently OVERRIDDEN by a `Bypass / Everyone` policy (`Public (temporary)`) → page is PUBLIC,
+    no login** (decided 2026-06-12, Friday — didn't want to send student invites going into the weekend).
+    Delete that Bypass policy to re-gate. See the red HARD CHECKPOINT at the top of this section.
+  - **Gotchas hit (for future reference):**
+    1. **No-policy = total lockout.** The app existed + covered both hostnames but had **no saved policy**
+       (earlier attempt lost in a 500). Access is default-deny → "that account does not have access" for
+       *everyone*. Fix = save an Allow policy.
+    2. **Stale team-domain branding.** After the team rename, the Pages-gate login page still showed
+       `raspy-tree-0afe.cloudflareaccess.com` — **cosmetic only**, not the blocker (Access apps keep their
+       original auth-domain login URL until re-saved). Team domain is genuinely `optivem`.
+    3. **`finish setup` IdP test 500s** (Cloudflare-side, FRA edge) — the standalone IdP Test is flaky and
+       **not required**; validate via the real app login instead.
+    4. **Emails-include rule is fragile** — only matches the email GitHub passes (your GitHub *primary*
+       email). Used **GitHub → Organizations → `optivem`** instead as a can't-miss admin rule.
 
-### ⚠️ NEXT ACTION — apply Cloudflare Access (gate the dashboard)
-`learn.optivem.com` + `optivem-learn.pages.dev` are **public + ungated** (exposing student data) until
-this is done. Steps (in the user's Cloudflare + GitHub — agent can't reach those dashboards):
+### ⚠️ NEXT ACTIONS
+**(All PAUSED 2026-06-12 — the page is public for now. A + B below are the re-gating work; do them as
+part of the 2026-07-02 re-gate, or whenever onboarding students. Re-gate itself = delete the `Public
+(temporary)` Bypass policy.)**
 
-1. **GitHub OAuth App** — `optivem` org → Settings → Developer settings → OAuth Apps → New.
-   Homepage `https://<team>.cloudflareaccess.com`, callback
-   `https://<team>.cloudflareaccess.com/cdn-cgi/access/callback` (`<team>` = Zero Trust team domain,
-   Zero Trust → Settings → Custom Pages). Copy Client ID + generate Client Secret.
-2. **Zero Trust → Settings → Authentication → Login methods → Add → GitHub** → paste id/secret → Test.
-3. **Zero Trust → Access → Applications → Add → Self-hosted**: name "Optivem School Dashboard",
-   **domains `learn.optivem.com` AND `optivem-learn.pages.dev`** (both, so the raw Pages URL isn't a
-   back-door), IdP = GitHub.
-4. **Policy** "Students and admins", Action Allow, **Include**: GitHub→Teams→`optivem`→`optivem-students`
-   **+ Emails → the admin's email** (so admin gets in while the team is still empty).
-5. **Test** incognito → both URLs prompt GitHub login; admin gets in, non-member denied.
-   - ⚠️ Gotcha: GitHub→Teams rule needs the OAuth app authorized to read `optivem` org teams (approve as
-     org owner on first login / grant if org restricts OAuth apps), else the team rule admits nobody.
+**A — Tighten the Access policy to the team (you, in Cloudflare).** Current Include is `Organizations →
+optivem` (admits *any* org member). Switch to least-privilege:
+  1. Edit policy `Students and admins` → **add Include: GitHub → Teams → `optivem` → `optivem-students`**.
+  2. **Test incognito you still get in** (you're already in the team) before removing the org rule.
+  3. **Remove** the broad `Organizations → optivem` include. (Keeps non-student org members out.)
 
-### After Access works (agent can do these)
-- **Populate `optivem-students` from `config/students.json`** (15 students) — `gh api` to add members.
-  Hold until Access is verified (avoids premature team invites). Handles: `jcupac, longhibeck, ognjenkl,
-  CurlyFire, RomainChamb, jasonribble, anilvv1, david-oc-miller, ndeleva-armedia, sowmiya-thoguluva,
-  Andrijana-N, astevanovski, gerasovskiboris, anatrajkovskaarmedia, vilosia-ai`.
+**B — Populate `optivem-students` (agent can do; fires 15 real org invites — confirm first).** Adds the 15
+students as org members + team members via `gh api PUT /orgs/optivem/teams/optivem-students/memberships/<user>`.
+Org base perm is `none` (verified) → zero repo access, identity-only as designed. **Students can't access
+until they ACCEPT the org invite.** Handles: `jcupac, longhibeck, ognjenkl, CurlyFire, RomainChamb,
+jasonribble, anilvv1, david-oc-miller, ndeleva-armedia, sowmiya-thoguluva, Andrijana-N, astevanovski,
+gerasovskiboris, anatrajkovskaarmedia, vilosia-ai`.
+
+**C — Optional cleanup:** the leftover **`Optivem School Test`** Access app (gates `optivem-school-test.pages.dev`,
+policy "Members") is from earlier school-test validation — delete when school-test is retired.
 
 ### Other open follow-ups
 - ⚠️ **Renew `PROJECT_TOKEN` before 2026-06-17** (expires in 5 days) — it powers all 5 hub workflows
@@ -143,9 +171,9 @@ into school (so the two diverge).
    - ✅ **Old URL redirect** (`ee2fa0b`, repointed `e437f45`) — `optivem.github.io/hub` serves a static
      "we've moved" page (Pages switched to branch `main`/`docs` deploy) → **`https://learn.optivem.com/`**.
      (Only serves until 2026-07-02 — Pages dies on Free+private.)
-   - ⏭ **Remaining (you, in Cloudflare):** set up **Cloudflare Access** on `learn.optivem.com`
-     (+ `optivem-learn.pages.dev`) — GitHub IdP + `optivem-students` team. ⚠️ `learn.optivem.com` is
-     currently **public + ungated** (shows student data) until Access is applied.
+   - ✅ **Cloudflare Access LIVE (2026-06-12)** — GitHub IdP + Access app gating **both** hostnames; no
+     longer public. Policy currently `Organizations → optivem`; tighten to the `optivem-students` team +
+     populate the roster (see RESUME HERE → Next Actions A/B). Full setup notes + gotchas in RESUME HERE.
    - Gate Access with **GitHub IdP + the `optivem-students` team**, synced from `students.json`. **The team
      has NO repo access** — purely an identity group for Access (giving students hub repo access would leak
      other students' private data once hub is private). ✅ Team created 2026-06-12 (`optivem-students`, no
